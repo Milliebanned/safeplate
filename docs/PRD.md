@@ -1,6 +1,6 @@
 # SafePlate — Product Requirements Document
 
-**Live app:** https://safeplate-alpha.vercel.app
+**Live app:** https://safeplate.milliebanned.xyz
 **Repository:** https://github.com/Milliebanned/safeplate
 
 ## 1. Summary

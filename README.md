@@ -2,8 +2,8 @@
 
 **Allergen-safe menus for restaurants — verified on every pull request.**
 
-🔗 **Live app:** https://safeplate-alpha.vercel.app
-🍽️ **Demo menu (no sign-up):** https://safeplate-alpha.vercel.app/m/demo-bistro
+🔗 **Live app:** https://safeplate.milliebanned.xyz
+🍽️ **Demo menu (no sign-up):** https://safeplate.milliebanned.xyz/m/demo-bistro
 
 A guest with a sesame allergy asks, "Is the salmon safe?" Too often the honest answer is "I think so". The dressing changed last week, and nobody updated the allergen sheet.
 
