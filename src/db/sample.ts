@@ -26,39 +26,45 @@ export async function loadSampleMenu(tx: Tx, restaurantId: string) {
     .returning({ id: ingredients.id, name: ingredients.name });
   const ingredientId = new Map(ingredientRows.map((r) => [r.name, r.id]));
 
-  const recipeId = new Map<string, string>();
-  for (const r of SAMPLE_RECIPES) {
-    const [row] = await tx.insert(recipes).values({ restaurantId, name: r.name }).returning({ id: recipes.id });
-    recipeId.set(r.name, row.id);
-    await tx.insert(recipeComponents).values(
+  // Batched inserts: a handful of round trips instead of one per row, so this stays fast.
+  const recipeRows = await tx
+    .insert(recipes)
+    .values(SAMPLE_RECIPES.map((r) => ({ restaurantId, name: r.name })))
+    .returning({ id: recipes.id, name: recipes.name });
+  const recipeId = new Map(recipeRows.map((r) => [r.name, r.id]));
+  await tx.insert(recipeComponents).values(
+    SAMPLE_RECIPES.flatMap((r) =>
       r.components.map((c) =>
         "ingredient" in c
-          ? { recipeId: row.id, ingredientId: ingredientId.get(c.ingredient)! }
-          : { recipeId: row.id, childRecipeId: recipeId.get(c.recipe)! },
+          ? { recipeId: recipeId.get(r.name)!, ingredientId: ingredientId.get(c.ingredient)! }
+          : { recipeId: recipeId.get(r.name)!, childRecipeId: recipeId.get(c.recipe)! },
       ),
-    );
-  }
+    ),
+  );
 
-  for (const d of SAMPLE_DISHES) {
-    const [row] = await tx
-      .insert(dishes)
-      .values({
+  const dishRows = await tx
+    .insert(dishes)
+    .values(
+      SAMPLE_DISHES.map((d) => ({
         restaurantId,
         name: d.name,
         description: d.description,
         category: d.category,
         priceCents: d.priceCents,
         published: d.published,
-      })
-      .returning({ id: dishes.id });
-    await tx.insert(dishComponents).values(
+      })),
+    )
+    .returning({ id: dishes.id, name: dishes.name });
+  const dishId = new Map(dishRows.map((d) => [d.name, d.id]));
+  await tx.insert(dishComponents).values(
+    SAMPLE_DISHES.flatMap((d) =>
       d.components.map((c) =>
         "ingredient" in c
-          ? { dishId: row.id, ingredientId: ingredientId.get(c.ingredient)! }
-          : { dishId: row.id, recipeId: recipeId.get(c.recipe)! },
+          ? { dishId: dishId.get(d.name)!, ingredientId: ingredientId.get(c.ingredient)! }
+          : { dishId: dishId.get(d.name)!, recipeId: recipeId.get(c.recipe)! },
       ),
-    );
-  }
+    ),
+  );
 
   return {
     ingredients: SAMPLE_INGREDIENTS.length,

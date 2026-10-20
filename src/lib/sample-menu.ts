@@ -34,7 +34,7 @@ export const SAMPLE_INGREDIENTS: { name: string; allergens: AllergenCode[] }[] =
   { name: "Wheat pita bread", allergens: ["gluten"] },
 ];
 
-// Ordered so that every sub-recipe appears after the sub-recipes it uses.
+// Every sub-recipe that another one uses is listed in this file before it.
 export const SAMPLE_RECIPES: { name: string; components: SampleComponent[] }[] = [
   {
     name: "Hummus",
