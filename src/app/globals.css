@@ -3,6 +3,7 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display-face);
 }
 
 :root {
@@ -10,13 +11,18 @@
 }
 
 body {
-  background: #f8faf9;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(16, 185, 129, 0.08), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgba(245, 158, 11, 0.08), transparent 60%),
+    #f7f5ef;
   color: #0f172a;
 }
 
-/* Keep pages calm and predictable: no motion for users who ask for less. */
+/* Calm, predictable pages for anyone who asks for less motion. */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     transition: none !important;
     animation: none !important;
   }
