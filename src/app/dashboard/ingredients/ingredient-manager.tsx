@@ -51,6 +51,7 @@ export function IngredientManager({ ingredients }: { ingredients: IngredientView
     setDraft({ id: ingredient.id, name: ingredient.name, allergens: [...ingredient.allergens] });
     setNameError(undefined);
     setFlash(null);
+    document.getElementById("ingredient-name")?.focus();
   }
 
   return (

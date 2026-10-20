@@ -134,6 +134,7 @@ export function RecipeManager({ recipes, options }: { recipes: RecipeView[]; opt
                         });
                         setErrors({});
                         setFlash(null);
+                        document.getElementById("recipe-name")?.focus();
                       }}
                       data-testid={`edit-${id}`}
                       aria-label={`Edit ${recipe.name}`}
