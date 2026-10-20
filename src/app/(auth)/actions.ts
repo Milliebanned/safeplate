@@ -14,6 +14,11 @@ import {
 
 export type AuthResult = { fieldErrors?: Record<string, string>; error?: string };
 
+/** Form state for <form action>: errors plus the values to put back (never the password). */
+export type AuthFormState = AuthResult & { values?: Record<string, string> };
+
+const text = (form: FormData, key: string) => String(form.get(key) ?? "");
+
 const EMAIL_TAKEN = "An account with this email already exists";
 
 async function emailTaken(email: string) {
@@ -91,6 +96,21 @@ export async function login(input: { email: string; password: string; next?: str
   const next = input.next ?? "";
   // Only ever return to a dashboard page, never to an outside address.
   redirect(/^\/dashboard(\/[\w-]*)*$/.test(next) ? next : "/dashboard");
+}
+
+// Form-action versions: these work even if the button is clicked before the page's
+// JavaScript has loaded, and they always POST, so credentials never appear in a URL.
+
+export async function signupAction(_prev: AuthFormState, form: FormData): Promise<AuthFormState> {
+  const values = { restaurantName: text(form, "restaurantName"), email: text(form, "email") };
+  const result = await signup({ ...values, password: text(form, "password"), confirmPassword: text(form, "confirmPassword") });
+  return { ...result, values };
+}
+
+export async function loginAction(_prev: AuthFormState, form: FormData): Promise<AuthFormState> {
+  const values = { email: text(form, "email") };
+  const result = await login({ ...values, password: text(form, "password"), next: text(form, "next") || undefined });
+  return { ...result, values };
 }
 
 export async function logout() {

@@ -1,33 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useActionState } from "react";
 import { FlashMessage } from "@/components/flash";
 import { inputClass, labelClass, primaryButton } from "@/components/ui";
-import { login } from "../actions";
+import { type AuthFormState, loginAction } from "../actions";
 
 export function LoginForm({ next, notice }: { next?: string; notice?: string }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
-
-  function onSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    startTransition(async () => {
-      const result = await login({ email, password, next });
-      setError(result?.error ?? null);
-    });
-  }
+  const [state, formAction, pending] = useActionState<AuthFormState, FormData>(loginAction, {});
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-4" data-testid="login-form">
-      {notice && !error && (
+    <form action={formAction} noValidate className="space-y-4" data-testid="login-form">
+      {notice && !state.error && (
         <p role="status" data-testid="login-notice" className="rounded-lg bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900">
           {notice}
         </p>
       )}
-      <FlashMessage flash={error ? { kind: "error", text: error } : null} />
+      <FlashMessage flash={state.error ? { kind: "error", text: state.error } : null} />
+      {next && <input type="hidden" name="next" value={next} />}
       <div>
         <label htmlFor="email" className={labelClass}>
           Email
@@ -39,8 +29,7 @@ export function LoginForm({ next, notice }: { next?: string; notice?: string }) 
           autoComplete="email"
           data-testid="login-email"
           className={inputClass}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          defaultValue={state.values?.email ?? ""}
         />
       </div>
       <div>
@@ -54,8 +43,6 @@ export function LoginForm({ next, notice }: { next?: string; notice?: string }) 
           autoComplete="current-password"
           data-testid="login-password"
           className={inputClass}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       <button type="submit" className={`${primaryButton} w-full`} disabled={pending} data-testid="login-submit">
