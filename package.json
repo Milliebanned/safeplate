@@ -16,6 +16,7 @@
     "@neondatabase/serverless": "^1.2.0",
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.4",
+    "motion": "^14.4.0",
     "next": "16.4.2",
     "qrcode": "^1.5.4",
     "react": "19.3.0",
