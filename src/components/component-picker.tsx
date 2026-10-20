@@ -75,6 +75,7 @@ export function ComponentPicker({
                             id={id}
                             type="checkbox"
                             data-testid={id}
+                            aria-label={option.name}
                             className="mt-1 size-4 accent-emerald-600"
                             checked={chosen.has(key(option))}
                             onChange={(e) => toggle(option, e.target.checked)}
