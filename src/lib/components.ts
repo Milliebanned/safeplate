@@ -24,3 +24,10 @@ export function savedMessage(kind: "Dish" | "Sub-recipe", name: string, allergen
     ? `${kind} "${name}" saved. Contains: ${formatAllergens(allergens)}.`
     : `${kind} "${name}" saved. Contains no major allergens.`;
 }
+
+/** `Ingredient "X" added. Contains: Sesame.`: confirms exactly which allergens were saved. */
+export function ingredientSavedMessage(name: string, allergens: readonly string[], action: "added" | "updated") {
+  return allergens.length
+    ? `Ingredient "${name}" ${action}. Contains: ${formatAllergens(allergens)}.`
+    : `Ingredient "${name}" ${action}. Contains no major allergens.`;
+}
