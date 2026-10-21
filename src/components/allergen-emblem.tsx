@@ -19,20 +19,6 @@ export const ALLERGEN_COLORS: Record<string, string> = {
   "tree-nuts": "#7c2d12",
 };
 
-// Photos for dishes from the sample menu (see docs/CREDITS.md).
-const SAMPLE_PHOTOS: Record<string, string> = {
-  "grilled salmon": "/dishes/grilled-salmon.webp",
-  "hummus & pita": "/dishes/hummus-pita.webp",
-  "garden salad": "/dishes/garden-salad.webp",
-  "peanut noodles": "/dishes/peanut-noodles.webp",
-  "garlic shrimp": "/dishes/garlic-shrimp.webp",
-  "chocolate brownie": "/dishes/chocolate-brownie.webp",
-};
-
-export function dishPhoto(name: string): string | undefined {
-  return SAMPLE_PHOTOS[name.trim().toLowerCase()];
-}
-
 const initials = (name: string) =>
   name
     .split(/\s+/)
@@ -48,8 +34,10 @@ export function AllergenEmblem({
   highlight = [],
   size = 76,
   tone = "light",
+  photoUrl,
 }: {
   name: string;
+  photoUrl?: string | null;
   allergens: readonly string[];
   highlight?: readonly string[];
   size?: number;
@@ -59,7 +47,7 @@ export function AllergenEmblem({
   const circumference = 2 * Math.PI * r;
   const gap = allergens.length > 1 ? 3 : 0;
   const segment = allergens.length ? circumference / allergens.length : circumference;
-  const photo = dishPhoto(name);
+  const photo = photoUrl;
   const label = allergens.length
     ? `${name}: contains ${allergens.map(allergenLabel).join(", ")}`
     : `${name}: no major allergens`;

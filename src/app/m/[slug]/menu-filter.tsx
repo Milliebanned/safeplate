@@ -15,6 +15,7 @@ export type PublicDish = {
   description: string;
   category: string;
   priceCents: number;
+  photoUrl: string | null;
   allergens: AllergenCode[];
 };
 
@@ -136,7 +137,7 @@ export function MenuFilter({
                     data-testid={`menu-dish-${testIdFor(dish.name)}`}
                     className={`flex gap-4 py-6 transition-opacity sm:gap-6 ${unsafe ? "opacity-60" : ""}`}
                   >
-                    <AllergenEmblem name={dish.name} allergens={dish.allergens} highlight={matches} size={72} tone="dark" />
+                    <AllergenEmblem name={dish.name} photoUrl={dish.photoUrl} allergens={dish.allergens} highlight={matches} size={72} tone="dark" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline gap-3">
                         <h3 className="font-serif text-2xl leading-tight text-ivory" data-testid="menu-dish-name">

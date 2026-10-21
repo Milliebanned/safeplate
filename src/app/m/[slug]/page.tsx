@@ -19,12 +19,13 @@ export default async function PublicMenuPage({ params, searchParams }: PageProps
   const menu = await loadMenu(restaurant.id);
   const dishes: PublicDish[] = menu.dishes
     .filter((d) => d.published)
-    .map(({ id, name, description, category, priceCents, allergens }) => ({
+    .map(({ id, name, description, category, priceCents, photoUrl, allergens }) => ({
       id,
       name,
       description,
       category,
       priceCents,
+      photoUrl,
       allergens,
     }));
 
