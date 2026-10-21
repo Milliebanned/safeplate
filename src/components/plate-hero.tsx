@@ -118,7 +118,7 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
       onFocusCapture={() => setHovering(true)}
       onBlurCapture={() => setHovering(false)}
     >
-      <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
+      <div className="grid min-w-0 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
         {/* Plate stage */}
         <div
           ref={stageRef}
@@ -170,7 +170,7 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
         </div>
 
         {/* Title + glass card */}
-        <div className="relative space-y-6">
+        <div className="relative min-w-0 space-y-6">
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
               Demo Bistro · {dish.category}
@@ -268,17 +268,17 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
       </div>
 
       {/* Dish strip with a sliding highlight */}
-      <div className="mt-8 flex items-center justify-center gap-2 sm:gap-3">
+      <div className="mt-8 flex min-w-0 items-center justify-center gap-1 sm:gap-3">
         <button
           type="button"
           onClick={() => go(index - 1)}
           aria-label="Previous dish"
           data-testid="hero-prev"
-          className="grid size-10 place-items-center rounded-full text-slate-600 hover:bg-white"
+          className="grid size-9 shrink-0 place-items-center rounded-full text-slate-600 hover:bg-white sm:size-10"
         >
           ‹
         </button>
-        <ul className="flex gap-1 sm:gap-2">
+        <ul className="flex min-w-0 gap-0.5 overflow-x-auto sm:gap-2">
           {dishes.map((d, i) => (
             <li key={d.name}>
               <button
@@ -287,7 +287,7 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
                 aria-label={`Show ${d.name}`}
                 aria-current={i === index}
                 data-testid={`hero-thumb-${testIdFor(d.name)}`}
-                className="relative grid w-14 place-items-center rounded-2xl px-1 py-2 sm:w-20"
+                className="relative grid w-12 shrink-0 place-items-center rounded-2xl px-1 py-2 sm:w-20"
               >
                 {i === index && (
                   <motion.span
@@ -296,7 +296,7 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                   />
                 )}
-                <span className="relative size-10 overflow-hidden rounded-full ring-2 ring-white sm:size-12">
+                <span className="relative size-9 overflow-hidden rounded-full ring-2 ring-white sm:size-12">
                   <Image src={d.image} alt="" fill sizes="48px" className="object-cover" />
                 </span>
                 <span className="relative mt-1 hidden truncate text-[11px] font-medium text-slate-600 sm:block">{d.bold}</span>
@@ -309,7 +309,7 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
           onClick={() => go(index + 1)}
           aria-label="Next dish"
           data-testid="hero-next"
-          className="grid size-10 place-items-center rounded-full text-slate-600 hover:bg-white"
+          className="grid size-9 shrink-0 place-items-center rounded-full text-slate-600 hover:bg-white sm:size-10"
         >
           ›
         </button>
@@ -319,7 +319,7 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
             onClick={() => setPaused((p) => !p)}
             aria-label={paused ? "Play dish slideshow" : "Pause dish slideshow"}
             data-testid="hero-pause"
-            className="ml-1 grid size-10 place-items-center rounded-full text-slate-600 hover:bg-white"
+            className="grid size-9 shrink-0 place-items-center rounded-full text-slate-600 hover:bg-white sm:ml-1 sm:size-10"
           >
             {paused ? "▶" : "❚❚"}
           </button>

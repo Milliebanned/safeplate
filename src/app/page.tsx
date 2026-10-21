@@ -61,7 +61,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
         )}
 
         <section className="grid items-center gap-10 pb-12 pt-10 lg:grid-cols-12 lg:gap-6 lg:pt-14">
-          <div className="lg:col-span-5">
+          <div className="min-w-0 lg:col-span-5">
             <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-emerald-800">
               <span className="size-1.5 rounded-full bg-emerald-500" aria-hidden />
               Allergen-safe menus
@@ -100,7 +100,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
             </p>
           </div>
 
-          <div className="lg:col-span-7">
+          <div className="min-w-0 lg:col-span-7">
             <PlateHero dishes={HERO_DISHES} />
           </div>
         </section>
