@@ -14,7 +14,7 @@ SafePlate tells restaurant guests which dishes are safe for their allergies. A w
 
 ## The verification loop (Write → Test → Fix → Test again)
 
-1. **Write:** make the change on a `feat/…` or `fix/…` branch and open a PR.
+1. **Write:** make the change on a `feat/…` or `fix/…` branch (27 characters or fewer, so the Vercel preview address stays predictable for TestSprite) and open a PR.
 2. **Test:** TestSprite runs the suite on the PR's preview deployment and posts the result on the PR.
 3. **Fix:** if a test fails, read the failure bundle (`testsprite test failure get <test-id>`). It contains the failing step, DOM snapshots, a root-cause hypothesis and a suggested fix target. **Fix the root cause in the app.** Never weaken, skip or delete a test to make it pass.
 4. **Test again:** push the fix. The check reruns, and the PR can merge only when it is green.

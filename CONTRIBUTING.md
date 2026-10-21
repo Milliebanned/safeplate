@@ -4,7 +4,7 @@ SafePlate tells people with food allergies what is safe to eat, so correctness c
 
 ## The loop: Write → Test → Fix → Test again
 
-1. **Branch.** Create a branch from `main` named `feat/<short-description>` or `fix/<short-description>`.
+1. **Branch.** Create a branch from `main` named `feat/<short-description>` or `fix/<short-description>`. **Keep the whole branch name to 27 characters or fewer.** Vercel shortens longer preview addresses, and the TestSprite trigger finds each preview by its full branch address.
 2. **Write.** Make the change in small, focused commits with clear messages (`feat: …`, `fix: …`, `test: …`, `docs: …`). If behaviour or a user-facing message changes, update [docs/PRD.md](docs/PRD.md) in the same PR.
 3. **Check locally.**
    ```bash
