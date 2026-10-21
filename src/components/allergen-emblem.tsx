@@ -47,11 +47,13 @@ export function AllergenEmblem({
   allergens,
   highlight = [],
   size = 76,
+  tone = "light",
 }: {
   name: string;
   allergens: readonly string[];
   highlight?: readonly string[];
   size?: number;
+  tone?: "light" | "dark";
 }) {
   const r = 42;
   const circumference = 2 * Math.PI * r;
@@ -65,7 +67,7 @@ export function AllergenEmblem({
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }} role="img" aria-label={label}>
       <svg viewBox="0 0 100 100" className="absolute inset-0 size-full -rotate-90" aria-hidden>
-        <circle cx="50" cy="50" r={r} fill="none" stroke="#e7e1d8" strokeWidth="9" />
+        <circle cx="50" cy="50" r={r} fill="none" stroke={tone === "dark" ? "rgba(243,237,226,0.12)" : "#e7e1d8"} strokeWidth="9" />
         {allergens.length === 0 ? (
           <circle cx="50" cy="50" r={r} fill="none" stroke="#10b981" strokeWidth="9" />
         ) : (
