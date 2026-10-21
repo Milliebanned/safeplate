@@ -3,12 +3,13 @@
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { getDb } from "@/db";
-import { dishComponents, dishes } from "@/db/schema";
+import { dishComponents, dishPhotos, dishes } from "@/db/schema";
 import { type ActionResult, isUniqueViolation } from "@/lib/action-result";
 import type { Component } from "@/lib/allergens";
 import { requireOwner } from "@/lib/auth";
 import { NO_COMPONENTS, ownComponents, savedMessage } from "@/lib/components";
 import { loadMenu } from "@/lib/menu";
+import { parsePhotoDataUrl } from "@/lib/photo";
 import { CATEGORIES } from "@/lib/sample-menu";
 import { PRICE_ERROR, duplicateNameMessage, parsePrice, validateDescription, validateItemName } from "@/lib/validation";
 
@@ -20,6 +21,8 @@ export type DishInput = {
   price: string;
   published: boolean;
   components: Component[];
+  /** keep: leave the photo as it is · set: store a new photo (data URL) · remove: delete it */
+  photo?: { action: "keep" } | { action: "remove" } | { action: "set"; dataUrl: string };
 };
 
 export async function saveDish(input: DishInput): Promise<ActionResult> {
@@ -45,6 +48,9 @@ export async function saveDish(input: DishInput): Promise<ActionResult> {
   if (priceCents === null) fieldErrors.price = PRICE_ERROR;
   const components = ownComponents(menu, input.components);
   if (components.length === 0) fieldErrors.components = NO_COMPONENTS;
+  const photoAction = input.photo ?? { action: "keep" };
+  const photo = photoAction.action === "set" ? parsePhotoDataUrl(photoAction.dataUrl) : null;
+  if (photo && !photo.ok) fieldErrors.photo = photo.error;
   if (Object.keys(fieldErrors).length) return { ok: false, fieldErrors };
 
   const values = { name, description, category: input.category, priceCents: priceCents!, published: input.published };
@@ -63,6 +69,17 @@ export async function saveDish(input: DishInput): Promise<ActionResult> {
           c.kind === "ingredient" ? { dishId: id!, ingredientId: c.id } : { dishId: id!, recipeId: c.id },
         ),
       );
+      if (photo?.ok) {
+        const row = { contentType: photo.contentType, data: photo.data, updatedAt: new Date() };
+        await tx
+          .insert(dishPhotos)
+          .values({ dishId: id!, ...row })
+          .onConflictDoUpdate({ target: dishPhotos.dishId, set: row });
+        await tx.update(dishes).set({ imageUrl: null }).where(eq(dishes.id, id!));
+      } else if (photoAction.action === "remove") {
+        await tx.delete(dishPhotos).where(eq(dishPhotos.dishId, id!));
+        await tx.update(dishes).set({ imageUrl: null }).where(eq(dishes.id, id!));
+      }
       return id!;
     });
   } catch (error) {
