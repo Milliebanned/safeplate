@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LogoMark } from "@/components/logo";
 import { notFound } from "next/navigation";
 import { parseAvoidParam } from "@/lib/allergens";
 import { findRestaurantBySlug, loadMenu } from "@/lib/menu";
@@ -28,34 +29,32 @@ export default async function PublicMenuPage({ params, searchParams }: PageProps
     }));
 
   return (
-    <div className="flex flex-1 flex-col overflow-x-clip">
-      <header className="relative isolate overflow-hidden">
-        <svg aria-hidden viewBox="0 0 400 400" className="absolute -right-24 -top-28 -z-10 size-[26rem] opacity-90">
-          <circle cx="200" cy="200" r="150" fill="none" stroke="#d5f2e3" strokeWidth="58" strokeLinecap="round" strokeDasharray="520 1000" />
-          <circle cx="200" cy="200" r="186" fill="none" stroke="#059669" strokeOpacity="0.3" strokeWidth="2" strokeDasharray="4 10" />
-        </svg>
-        <div className="mx-auto max-w-2xl px-4 pb-4 pt-8">
-          <Link href="/" className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700 hover:underline">
-            SafePlate · Allergen menu
-          </Link>
-          <h1 className="font-display mt-2 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl" data-testid="menu-restaurant-name">
-            {restaurant.name}
-          </h1>
-          <p className="mt-2 text-slate-600">Tap your allergies to see what&apos;s safe for you — every dish is checked down to its last ingredient.</p>
+    <div className="theme-ink grain flex flex-1 flex-col overflow-x-clip">
+      <header className="mx-auto w-full max-w-3xl px-5 pb-6 pt-10 text-center">
+        <Link href="/" className="inline-flex items-center gap-2 text-ivory/60 hover:text-ivory" aria-label="SafePlate home">
+          <LogoMark tone="light" className="size-6" />
+        </Link>
+        <p className="mt-6 text-[11px] uppercase tracking-[0.4em] text-brass">Allergen menu</p>
+        <h1 className="mt-4 font-serif text-[clamp(2.8rem,10vw,5.5rem)] leading-[0.95] text-ivory" data-testid="menu-restaurant-name">
+          {restaurant.name}
+        </h1>
+        <p className="mx-auto mt-5 max-w-md text-ivory/60">
+          Choose your allergies and every dish tells you whether it is safe, checked down to the last ingredient.
+        </p>
+        <div className="mx-auto mt-8 flex max-w-xs items-center gap-3" aria-hidden>
+          <span className="hairline flex-1" />
+          <span className="size-1.5 rounded-full bg-brass" />
+          <span className="hairline flex-1" />
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-2xl flex-1 space-y-6 px-4 py-4">
-        <p
-          role="note"
-          className="flex gap-2 rounded-2xl border border-amber-200 bg-amber-50/90 px-4 py-3 text-sm text-amber-900"
-        >
-          <span aria-hidden>ⓘ</span>
+      <main className="mx-auto w-full max-w-3xl flex-1 space-y-10 px-5 pb-16">
+        <p role="note" className="mx-auto max-w-xl text-center text-sm italic text-ivory/50">
           <span data-testid="menu-disclaimer">Allergen information is provided by the restaurant. Always tell your server about your allergies.</span>
         </p>
 
         {dishes.length === 0 ? (
-          <p className="rounded-3xl border border-white/80 bg-white/80 p-6 text-slate-600" data-testid="menu-empty">
+          <p className="rounded-[2rem] border border-ivory/10 p-8 text-center font-serif text-2xl italic text-ivory/70" data-testid="menu-empty">
             This restaurant hasn&apos;t published any dishes yet.
           </p>
         ) : (
@@ -63,10 +62,11 @@ export default async function PublicMenuPage({ params, searchParams }: PageProps
         )}
       </main>
 
-      <footer className="mt-10 border-t border-slate-200/80 bg-white/60">
-        <p className="mx-auto max-w-2xl px-4 py-5 text-center text-sm text-slate-500">
-          Powered by{" "}
-          <Link href="/" className="font-semibold text-emerald-700 hover:underline">
+      <footer className="border-t border-ivory/10">
+        <p className="mx-auto flex max-w-3xl items-center justify-center gap-2 px-5 py-6 text-sm text-ivory/45">
+          <LogoMark tone="light" className="size-4" />
+          Allergen checks by{" "}
+          <Link href="/" className="text-ivory/70 hover:text-ivory">
             SafePlate
           </Link>
         </p>
