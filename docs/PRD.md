@@ -107,7 +107,8 @@ A **"Log out"** button is always visible in the dashboard navigation. It ends th
 ### 5.8 Dishes (`/dashboard/dishes`)
 - A list of dishes grouped by category (Starters, Mains, Sides, Desserts, Drinks). Each shows its price, its **calculated allergens**, and whether it is **Published** or **Draft**.
 - Empty state: **"No dishes yet. Create your first dish."**
-- **Create / edit fields:** Name, Description (optional, up to 200 characters), Category, Price, Components (ingredients and/or sub-recipes), Published (checkbox).
+- **Create / edit fields:** Name, Description (optional, up to 200 characters), Category, Price, Dish photo (optional), Components (ingredients and/or sub-recipes), Published (checkbox).
+- **Dish photo:** the owner chooses a JPG, PNG or WebP image. It is cropped to a square and resized in the browser, previewed as a round plate, and shown on the public menu. The owner can change or remove it at any time. Each dish in the dashboard list shows its photo.
 - **Delete:** two-step confirmation.
 
 | Situation | Message |
@@ -118,6 +119,9 @@ A **"Log out"** button is always visible in the dashboard navigation. It ends th
 | Description longer than 200 characters | `Description must be 200 characters or fewer` |
 | Price missing, zero, negative, more than 2 decimals, or above 9999.99 | `Enter a price like 12.50` |
 | No components selected | `Add at least one ingredient or sub-recipe` |
+| Photo is not a JPG, PNG or WebP image | `Choose a JPG, PNG or WebP image` |
+| Photo larger than 15 MB before resizing | `Choose an image smaller than 15 MB` |
+| Photo larger than 1.5 MB after resizing | `Photo must be smaller than 1.5 MB` |
 
 Prices are shown in US dollars with two decimals, e.g. `$12.50`.
 
@@ -129,7 +133,7 @@ Prices are shown in US dollars with two decimals, e.g. `$12.50`.
 
 ### 5.10 Public menu (`/m/{address}`)
 No sign-in needed. Mobile-first layout.
-- Shows the restaurant name and only **published** dishes, grouped by category, each with price, description and allergen badges. Draft dishes never appear.
+- Shows the restaurant name and only **published** dishes, grouped by category, each with its photo (or its initials when it has none), price, description and allergen badges. Draft dishes never appear.
 - **"I'm allergic to:"** with 14 toggle buttons, one per allergen.
 - With no allergies selected: **"Select your allergies to see which dishes are safe for you."**
 - With allergies selected, every dish shows either **"Safe for you"** or **"Contains: {matching allergens}"**, and a summary line shows **"{X} of {Y} dishes are free from your selected allergens."**
@@ -163,7 +167,8 @@ The public demo restaurant **Demo Bistro** (`/m/demo-bistro`) and the "Load samp
 | Mustard Vinaigrette | Dijon mustard, Olive oil, Lemon juice | Mustard |
 | Green Goddess Dressing | Mustard Vinaigrette, Greek yogurt | Milk, Mustard |
 
-**Dishes (9):**
+**Dishes (9):** Hummus & Pita, Garden Salad, Peanut Noodles, Grilled Salmon, Garlic Shrimp and Chocolate Brownie come with photos.
+
 | Dish | Category | Price | Components | Calculated allergens | Status |
 |---|---|---|---|---|---|
 | Hummus & Pita | Starters | $8.50 | Hummus, Wheat pita bread | Gluten, Sesame | Published |
