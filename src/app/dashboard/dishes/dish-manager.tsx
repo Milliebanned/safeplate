@@ -2,9 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { AllergenBadges } from "@/components/allergen-badges";
+import { AllergenEmblem } from "@/components/allergen-emblem";
 import { ComponentPicker, type PickerOption } from "@/components/component-picker";
 import { ConfirmDelete } from "@/components/confirm-delete";
 import { FieldError, type Flash, FlashMessage } from "@/components/flash";
+import { PhotoPicker } from "@/components/photo-picker";
 import { cardClass, inputClass, labelClass, primaryButton, secondaryButton } from "@/components/ui";
 import type { Component } from "@/lib/allergens";
 import type { DishView } from "@/lib/menu";
@@ -20,10 +22,17 @@ const EMPTY: DishInput = {
   price: "",
   published: true,
   components: [],
+  photo: { action: "keep" },
 };
 
 export function DishManager({ dishes, options }: { dishes: DishView[]; options: PickerOption[] }) {
   const [draft, setDraft] = useState<DishInput>(EMPTY);
+  // The saved photo of the dish being edited, shown until the owner changes it.
+  const [currentPhoto, setCurrentPhoto] = useState<string | null>(null);
+  const resetForm = () => {
+    setDraft(EMPTY);
+    setCurrentPhoto(null);
+  };
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [flash, setFlash] = useState<Flash>(null);
   const [pending, startTransition] = useTransition();
@@ -36,7 +45,7 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
       const result = await saveDish(draft);
       if (result.ok) {
         setFlash({ kind: "success", text: result.message });
-        setDraft(EMPTY);
+        resetForm();
         setErrors({});
       } else {
         setErrors(result.fieldErrors ?? {});
@@ -49,7 +58,7 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
     startTransition(async () => {
       const result = await deleteDish(dish.id);
       setFlash({ kind: result.ok ? "success" : "error", text: result.message ?? "Something went wrong." });
-      if (result.ok && draft.id === dish.id) setDraft(EMPTY);
+      if (result.ok && draft.id === dish.id) resetForm();
     });
   }
 
@@ -132,6 +141,12 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
             <FieldError id="error-dish-price" message={errors.price} />
           </div>
         </div>
+        <PhotoPicker
+          currentUrl={currentPhoto}
+          change={draft.photo ?? { action: "keep" }}
+          onChange={(photo) => set("photo", photo)}
+          error={errors.photo}
+        />
         <ComponentPicker
           options={options}
           selected={draft.components}
@@ -158,7 +173,7 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
               type="button"
               className={secondaryButton}
               onClick={() => {
-                setDraft(EMPTY);
+                resetForm();
                 setErrors({});
               }}
               data-testid="dish-cancel-edit"
@@ -192,6 +207,8 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
                         className="flex flex-col gap-3 p-4 sm:flex-row sm:items-start sm:justify-between"
                         data-testid={`dish-row-${id}`}
                       >
+                        <div className="flex gap-4">
+                        <AllergenEmblem name={dish.name} photoUrl={dish.photoUrl} allergens={dish.allergens} size={60} />
                         <div className="space-y-1.5">
                           <p className="flex flex-wrap items-center gap-2">
                             <span className="font-serif text-xl text-ink" data-testid="dish-row-name">
@@ -214,6 +231,7 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
                             Made with: {dish.components.map((c) => c.name).join(", ")}
                           </p>
                         </div>
+                        </div>
                         <div className="flex items-center gap-1">
                           <button
                             type="button"
@@ -227,7 +245,9 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
                                 price: (dish.priceCents / 100).toFixed(2),
                                 published: dish.published,
                                 components: dish.components.map(({ kind, id }) => ({ kind, id }) as Component),
+                                photo: { action: "keep" },
                               });
+                              setCurrentPhoto(dish.photoUrl);
                               setErrors({});
                               setFlash(null);
                               document.getElementById("dish-name")?.focus();
