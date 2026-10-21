@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import {
   boolean,
   check,
+  customType,
   index,
   integer,
   pgTable,
@@ -108,6 +109,8 @@ export const dishes = pgTable(
     category: text("category").notNull(),
     priceCents: integer("price_cents").notNull(),
     published: boolean("published").notNull().default(true),
+    // A bundled photo (used by the sample menu). Uploaded photos live in dish_photos.
+    imageUrl: text("image_url"),
   },
   (t) => [
     uniqueIndex("dishes_name_unique").on(t.restaurantId, sql`lower(${t.name})`),
@@ -130,3 +133,17 @@ export const dishComponents = pgTable(
     check("dish_components_one_target", sql`(${t.ingredientId} is null) <> (${t.recipeId} is null)`),
   ],
 );
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({
+  dataType: () => "bytea",
+});
+
+/** Photos uploaded by owners, already cropped and compressed in the browser. */
+export const dishPhotos = pgTable("dish_photos", {
+  dishId: uuid("dish_id")
+    .primaryKey()
+    .references(() => dishes.id, { onDelete: "cascade" }),
+  contentType: text("content_type").notNull(),
+  data: bytea("data").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
