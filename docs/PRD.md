@@ -146,6 +146,9 @@ No sign-in needed. Mobile-first layout.
 ### 5.11 Health check (`/api/health`)
 Returns JSON `{"status":"ok","database":"ok"}` when the app and database are working.
 
+### 5.12 Confirmation messages
+On the Ingredients, Sub-recipes, Dishes and Settings pages, every result message (success or error) appears pinned to the bottom of the screen, so the owner sees it even after acting on an item far down a long list.
+
 ## 6. Security and data rules
 - Passwords are stored only as secure hashes.
 - Sessions use an HTTP-only cookie and expire after 30 days.
