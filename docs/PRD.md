@@ -149,6 +149,9 @@ Returns JSON `{"status":"ok","database":"ok"}` when the app and database are wor
 ### 5.12 Confirmation messages
 On the Ingredients, Sub-recipes, Dishes and Settings pages, every result message (success or error) appears pinned to the bottom of the screen, so the owner sees it even after acting on an item far down a long list.
 
+### 5.13 Safety record (`/verified`)
+A public page, linked from the home page as "See the safety record", that lists the repository's recent pull requests with the TestSprite verdict on each one's latest commit (Passed, Failed, Running or Not tested), a link to the TestSprite report, and the latest merged release. It reads GitHub's public API and refreshes every five minutes. If GitHub cannot be reached, it shows: "The verification history is temporarily unavailable."
+
 ## 6. Security and data rules
 - Passwords are stored only as secure hashes.
 - Sessions use an HTTP-only cookie and expire after 30 days.
