@@ -16,7 +16,7 @@ TestSprite planned and generated every test. We reviewed the plan before the fir
 We updated the saved code through the TestSprite CLI (`testsprite test code put`), so that every test:
 
 - **checks the exact result** from the PRD, for example `5 of 8 dishes are free from your selected allergens.`;
-- **creates fresh data on every run** (names and emails carry a run-specific number);
+- **creates fresh data on every run** (names and emails carry a run-specific random number, never a date, so two runs on the same day cannot collide);
 - **cleans up after itself**, so tests never collide with each other or with the next run.
 
 Two fixed restaurants keep the data predictable: **Demo Bistro** (`/m/demo-bistro`, the sample menu, read-only) and **Empty Kitchen** (`/m/empty-kitchen`, no dishes). Tests that need an owner log in to the **Test Kitchen** test account.
@@ -59,7 +59,7 @@ Two fixed restaurants keep the data predictable: **Demo Bistro** (`/m/demo-bistr
 | Open public menu from dashboard | "View public menu" opens the restaurant's own public menu |
 | Navigate dashboard sections from the overview | Every section opens with the right heading and is marked as the current page |
 | Search ingredients by name | Searching "butter" shows only Butter with its Milk tag; a search with no match shows the exact "No ingredients match" message |
-| Create ingredient with allergen tags | A new ingredient with Sesame shows the exact "added" message and its tag, then is deleted with the exact "deleted" message |
+| Create ingredient with allergen tags | A new ingredient with Sesame shows `Ingredient "…" added. Contains: Sesame.` and its tag, then is deleted with the exact "deleted" message |
 | Prevent duplicate sub-recipe names | A name that already exists (in any letter case) is rejected with the exact error, and the original is untouched |
 
 ## Next additions
