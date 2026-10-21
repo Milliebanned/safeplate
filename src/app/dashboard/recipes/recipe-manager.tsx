@@ -49,7 +49,7 @@ export function RecipeManager({ recipes, options }: { recipes: RecipeView[]; opt
 
   return (
     <div className="space-y-6">
-      <FlashMessage flash={flash} />
+      <FlashMessage flash={flash} floating />
 
       <form onSubmit={submit} noValidate className={`${cardClass} space-y-4`} data-testid="recipe-form">
         <h2 className="font-serif text-2xl text-ink">{editing ? "Edit sub-recipe" : "Create sub-recipe"}</h2>

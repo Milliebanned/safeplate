@@ -36,7 +36,7 @@ export function SettingsForms({ name, slug, baseUrl }: { name: string; slug: str
 
   return (
     <div className="space-y-6">
-      <FlashMessage flash={flash} />
+      <FlashMessage flash={flash} floating />
 
       <form onSubmit={submit} noValidate className={`${cardClass} space-y-4`} data-testid="settings-form">
         <h2 className="font-serif text-2xl text-ink">Restaurant details</h2>
