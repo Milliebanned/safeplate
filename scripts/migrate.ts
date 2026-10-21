@@ -44,6 +44,20 @@ async function main() {
     console.log("migrate: Demo Bistro already exists");
   }
 
+  // A permanent restaurant with no dishes, so the empty public menu can always be tested.
+  const empty = await db.select().from(restaurants).where(eq(restaurants.slug, "empty-kitchen"));
+  if (empty.length === 0) {
+    await db.transaction(async (tx) => {
+      const passwordHash = await bcrypt.hash(randomBytes(32).toString("hex"), 10);
+      const [user] = await tx
+        .insert(users)
+        .values({ email: "empty@safeplate.app", passwordHash })
+        .returning({ id: users.id });
+      await tx.insert(restaurants).values({ ownerId: user.id, name: "Empty Kitchen", slug: "empty-kitchen" });
+    });
+    console.log("migrate: Empty Kitchen created");
+  }
+
   // Give Demo Bistro's sample dishes their bundled photos (safe to run on every build).
   const { SAMPLE_DISHES } = await import("../src/lib/sample-menu");
   const { and, isNull } = await import("drizzle-orm");
