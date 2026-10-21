@@ -135,6 +135,13 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
             A single mistake could hide a peanut. That is why no update to SafePlate is released until our automated tests
             have checked it on a live copy of the app.
           </p>
+          <Link
+            href="/verified"
+            className="mt-7 inline-flex rounded-full bg-ivory px-6 py-3 text-sm font-semibold text-ink hover:bg-white"
+            data-testid="view-safety-record"
+          >
+            See the safety record
+          </Link>
           <ol className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-ivory/10 bg-ivory/10 sm:grid-cols-4">
             {STANDARD.map((step, i) => (
               <li key={step.label} className="bg-bottle p-6">
@@ -153,7 +160,9 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
           <span className="flex items-center gap-2">
             <LogoMark tone="light" className="size-5" />© {new Date().getFullYear()} SafePlate
           </span>
-          <span>Every change to SafePlate is tested automatically before it ships.</span>
+          <Link href="/verified" className="hover:text-ivory">
+            Every change to SafePlate is tested automatically before it ships.
+          </Link>
         </div>
       </footer>
     </div>

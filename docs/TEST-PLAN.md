@@ -3,7 +3,7 @@
 SafePlate is verified end to end by **TestSprite**. Every pull request deploys a Vercel preview, and the TestSprite GitHub App runs the full suite against it. A failing test blocks the merge.
 
 - **Project:** SafePlate (TestSprite web portal, frontend)
-- **Suite:** 24 tests, planned by TestSprite's agents from [PRD.md](PRD.md) and a live exploration of the app
+- **Suite:** 40 tests. 24 were planned by TestSprite's agents from [PRD.md](PRD.md) and a live exploration of the app; 16 more were written as plain-language plans and added with the TestSprite CLI (`testsprite test create --plan-from`)
 - **Browser size:** 1280 × 720
 
 ## How the tests are kept trustworthy
@@ -62,6 +62,26 @@ Two fixed restaurants keep the data predictable: **Demo Bistro** (`/m/demo-bistr
 | Create ingredient with allergen tags | A new ingredient with Sesame shows `Ingredient "…" added. Contains: Sesame.` and its tag, then is deleted with the exact "deleted" message |
 | Prevent duplicate sub-recipe names | A name that already exists (in any letter case) is rejected with the exact error, and the original is untouched |
 
-## Next additions
+### Added through the TestSprite CLI
 
-Tests for editing and deleting ingredients, sub-recipes and dishes, dish photos, draft dishes, allergen changes flowing through to dishes, and the restaurant settings are being added through the TestSprite CLI, using the same rules: exact checks, fresh data and cleanup.
+| Test | Verifies |
+|---|---|
+| Allergen change flows from an ingredient to its dishes | Ticking Mustard on an ingredient updates its sub-recipe, its dish and the public menu verdict "Contains: Mustard", then everything is cleaned up |
+| Block deleting an ingredient that is in use | Tahini cannot be deleted: `Can't delete "Tahini": it is used in Hummus.` |
+| Validate ingredient names | Empty, duplicate (any letter case) and 61-character names each show their exact error |
+| Show the empty ingredients state for a new restaurant | "No ingredients yet. Add your first one." |
+| Create a nested sub-recipe that inherits allergens | A sub-recipe made from another sub-recipe reports `Contains: Milk, Mustard.` |
+| Prevent a sub-recipe from containing itself | The exact circular-recipe error, and the original sub-recipe is unchanged |
+| Require at least one component in a sub-recipe | "Add at least one ingredient or sub-recipe" |
+| Block deleting a sub-recipe that is in use | `Can't delete "Hummus": it is used in Hummus & Pita.` |
+| Publish a new dish to the public menu | The saved message lists the dish's allergens; the dish appears on the public menu with its price and the right verdict |
+| Keep draft dishes off the public menu | A draft dish is marked Draft and never appears publicly |
+| Edit a dish's price and category | The new price and category are saved and shown |
+| Validate dish details | Missing fields, a three-decimal price and a 201-character description each show their exact error |
+| Validate restaurant settings | Bad address, taken address and short name are rejected, and nothing is saved |
+| Change the public menu address of a new restaurant | The new address serves the restaurant's public menu |
+| Load the sample menu into a new restaurant | "Sample menu loaded: 23 ingredients, 5 sub-recipes, 9 dishes." and the matching counts |
+| View the public safety record | The safety record lists the pull requests with their TestSprite verdicts |
+
+
+Dish photo upload is not yet covered by TestSprite, because it needs an image file inside the test browser. The photo checks themselves (type, size and file signature) are covered by unit tests in `src/lib/photo.test.ts`.
