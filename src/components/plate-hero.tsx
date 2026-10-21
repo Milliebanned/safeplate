@@ -1,80 +1,82 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useCallback, useEffect, useState } from "react";
 import { allergenLabel, type AllergenCode, formatAllergens, matchingAllergens } from "@/lib/allergens";
 import type { HeroDish } from "@/lib/hero-dishes";
 import { testIdFor } from "@/lib/test-id";
 import { formatPrice } from "@/lib/validation";
+import { ALLERGEN_COLORS } from "./allergen-emblem";
 
 const TRY_ALLERGENS: AllergenCode[] = ["milk", "gluten", "sesame", "peanuts", "fish"];
-const AUTOPLAY_MS = 5200;
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+const AUTOPLAY_MS = 4800;
+const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
-/** Title that wipes in letter by letter, in two weights (thin + heavy). */
-function RevealTitle({ light, bold, reduce }: { light: string; bold: string; reduce: boolean }) {
-  const line = (text: string, className: string, offset: number) => (
-    <span className={`block overflow-hidden pb-1 ${className}`} aria-hidden>
-      {[...text].map((ch, i) => (
-        <motion.span
-          key={`${text}-${i}`}
-          className="inline-block whitespace-pre"
-          initial={reduce ? { opacity: 0 } : { y: "110%", opacity: 0 }}
-          animate={reduce ? { opacity: 1 } : { y: "0%", opacity: 1 }}
-          exit={reduce ? { opacity: 0 } : { y: "-110%", opacity: 0, transition: { duration: 0.25, delay: i * 0.012 } }}
-          transition={{ duration: 0.55, ease: EASE_OUT, delay: offset + i * 0.03 }}
-        >
-          {ch}
-        </motion.span>
-      ))}
-    </span>
-  );
+/** Coloured arcs around the rim, one per allergen, that draw themselves in. */
+function AllergenArcs({ dish, reduce }: { dish: HeroDish; reduce: boolean }) {
+  const r = 47;
+  const n = dish.allergens.length;
+  const span = 100 / Math.max(n, 1);
   return (
-    <>
-      {line(light, "font-extralight tracking-tight", 0.35)}
-      {line(bold, "font-extrabold tracking-tight", 0.5)}
-    </>
+    <svg viewBox="0 0 100 100" className="absolute inset-0 size-full -rotate-90" aria-hidden>
+      <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(243,237,226,0.08)" strokeWidth="0.6" />
+      {n === 0 ? (
+        <motion.circle
+          key={`${dish.name}-none`}
+          cx="50"
+          cy="50"
+          r={r}
+          fill="none"
+          stroke="#10b981"
+          strokeWidth="1.4"
+          pathLength={100}
+          initial={{ strokeDasharray: "0 100" }}
+          animate={{ strokeDasharray: "100 0" }}
+          transition={{ duration: reduce ? 0 : 0.9, ease: EASE_OUT, delay: 0.25 }}
+        />
+      ) : (
+        dish.allergens.map((code, i) => (
+          <motion.circle
+            key={`${dish.name}-${code}`}
+            cx="50"
+            cy="50"
+            r={r}
+            fill="none"
+            stroke={ALLERGEN_COLORS[code]}
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            pathLength={100}
+            strokeDashoffset={-i * span}
+            initial={{ strokeDasharray: "0 100" }}
+            animate={{ strokeDasharray: `${span - 2} 100` }}
+            transition={{ duration: reduce ? 0 : 0.7, ease: EASE_OUT, delay: 0.25 + i * 0.12 }}
+          />
+        ))
+      )}
+    </svg>
   );
 }
 
-/** A ceramic plate that swoops in on a curved 3D arc while spinning, like a plate being set down. */
-function Plate({ dish, reduce, priority }: { dish: HeroDish; reduce: boolean; priority: boolean }) {
-  const arcIn = {
-    x: [340, 170, 0],
-    y: [-300, -70, 0],
-    rotate: [170, 55, 0],
-    scale: [0.72, 0.96, 1],
-    opacity: [0, 1, 1],
-  };
+/** Text running around the plate, like an engraved rim. */
+function RimText({ text, reduce }: { text: string; reduce: boolean }) {
   return (
-    <motion.div
-      className="absolute inset-0"
-      initial={reduce ? { opacity: 0 } : { x: 340, y: -300, rotate: 170, scale: 0.72, opacity: 0 }}
-      animate={reduce ? { opacity: 1 } : arcIn}
-      exit={
-        reduce
-          ? { opacity: 0 }
-          : { x: -140, y: -320, rotate: -150, scale: 0.7, opacity: 0, transition: { duration: 0.6, ease: [0.55, 0, 0.75, 0.25] } }
-      }
-      transition={reduce ? { duration: 0.3 } : { duration: 1.15, ease: EASE_OUT, times: [0, 0.6, 1] }}
+    <motion.svg
+      viewBox="0 0 200 200"
+      className="absolute -inset-[9%] size-[118%]"
+      animate={reduce ? undefined : { rotate: -360 }}
+      transition={{ duration: 90, ease: "linear", repeat: Infinity }}
+      aria-hidden
     >
-      {/* soft contact shadow, light from the upper left */}
-      <div className="absolute inset-[6%] translate-x-[5%] translate-y-[7%] rounded-full bg-slate-900/25 blur-2xl" aria-hidden />
-      {/* ceramic rim */}
-      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_25%,#ffffff_0%,#f6f3ee_55%,#e7e1d8_100%)] p-[5.5%] shadow-[inset_0_-6px_14px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.9)]">
-        <div className="relative size-full overflow-hidden rounded-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]">
-          <Image
-            src={dish.image}
-            alt={dish.name}
-            fill
-            sizes="(min-width: 1024px) 420px, 280px"
-            priority={priority}
-            className="object-cover"
-          />
-        </div>
-      </div>
-    </motion.div>
+      <defs>
+        <path id="rim" d="M100,100 m-92,0 a92,92 0 1,1 184,0 a92,92 0 1,1 -184,0" />
+      </defs>
+      <text className="fill-[#a49c8c] text-[6.2px] uppercase" style={{ letterSpacing: "0.32em" }}>
+        <textPath href="#rim" textLength={576} lengthAdjust="spacing">
+          {text}
+        </textPath>
+      </text>
+    </motion.svg>
   );
 }
 
@@ -86,199 +88,171 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
   const [avoid, setAvoid] = useState<AllergenCode[]>(["milk"]);
   const dish = dishes[index];
   const matches = matchingAllergens(dish.allergens, avoid);
-
   const go = useCallback((next: number) => setIndex((next + dishes.length) % dishes.length), [dishes.length]);
 
-  // Autoplay (never for people who prefer reduced motion), paused while hovering or paused by the user.
   useEffect(() => {
     if (reduce || paused || hovering) return;
     const timer = setTimeout(() => go(index + 1), AUTOPLAY_MS);
     return () => clearTimeout(timer);
   }, [index, paused, hovering, reduce, go]);
 
-  // Subtle 3D tilt of the whole stage following the pointer.
-  const stageRef = useRef<HTMLDivElement>(null);
-  const px = useMotionValue(0);
-  const py = useMotionValue(0);
-  const rotateY = useSpring(useTransform(px, [-0.5, 0.5], [9, -9]), { stiffness: 120, damping: 14 });
-  const rotateX = useSpring(useTransform(py, [-0.5, 0.5], [-7, 7]), { stiffness: 120, damping: 14 });
+  const statement = `${dish.name}  ·  ${
+    dish.allergens.length ? `contains ${dish.allergens.map(allergenLabel).join(", ")}` : "free from the 14 major allergens"
+  }  ·  `;
+  const rim = statement.repeat(statement.length < 48 ? 3 : 2);
+  const number = String(index + 1).padStart(2, "0");
 
   return (
     <section
       aria-roledescription="carousel"
       aria-label="Dishes from the Demo Bistro menu"
       data-testid="hero"
-      className="relative isolate"
+      className="relative"
       onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => {
-        setHovering(false);
-        px.set(0);
-        py.set(0);
-      }}
+      onMouseLeave={() => setHovering(false)}
       onFocusCapture={() => setHovering(true)}
       onBlurCapture={() => setHovering(false)}
     >
-      <div className="grid min-w-0 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
-        {/* Plate stage */}
-        <div
-          ref={stageRef}
-          className="relative mx-auto aspect-square w-full max-w-[460px] [perspective:1100px]"
-          onMouseMove={(e) => {
-            if (reduce || !stageRef.current) return;
-            const r = stageRef.current.getBoundingClientRect();
-            px.set((e.clientX - r.left) / r.width - 0.5);
-            py.set((e.clientY - r.top) / r.height - 0.5);
-          }}
-        >
-          {/* Rotating colour arc behind the plate */}
-          <motion.svg
-            viewBox="0 0 400 400"
-            className="pointer-events-none absolute -inset-[22%] -z-10 size-[144%]"
-            animate={{ rotate: reduce ? 0 : index * 62 }}
-            transition={{ duration: 1.4, ease: EASE_OUT }}
-            aria-hidden
-          >
-            <motion.circle
-              cx="200"
-              cy="200"
-              r="150"
-              fill="none"
-              strokeWidth="58"
-              strokeLinecap="round"
-              strokeDasharray="520 1000"
-              animate={{ stroke: dish.tint }}
-              transition={{ duration: 0.9 }}
-            />
-            <motion.circle
-              cx="200"
-              cy="200"
-              r="186"
-              fill="none"
-              strokeWidth="2"
-              strokeDasharray="4 10"
-              animate={{ stroke: dish.accent }}
-              opacity={0.35}
-              transition={{ duration: 0.9 }}
-            />
-          </motion.svg>
-
-          <motion.div className="absolute inset-[7%]" style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}>
-            <AnimatePresence initial={false} mode="popLayout">
-              <Plate key={dish.name} dish={dish} reduce={reduce} priority={index === 0} />
+      <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)_minmax(0,1fr)] lg:gap-24 xl:gap-28">
+        {/* Left: the dish, set like a menu entry */}
+        <div className="order-2 min-w-0 text-center lg:order-1 lg:text-right">
+          <p className="text-[11px] uppercase tracking-[0.35em] text-mist">
+            No. {number} · {dish.category}
+          </p>
+          <div className="relative mt-3 flex h-[6.6rem] items-end justify-center overflow-hidden lg:justify-end" aria-live="polite">
+            <span className="sr-only" data-testid="hero-dish-name">
+              {dish.name}
+            </span>
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.p
+                key={dish.name}
+                aria-hidden
+                className="font-serif text-[2.9rem] italic leading-[1.05] text-balance text-ivory"
+                initial={reduce ? { opacity: 0 } : { y: "100%", opacity: 0 }}
+                animate={{ y: "0%", opacity: 1 }}
+                exit={reduce ? { opacity: 0 } : { y: "-100%", opacity: 0 }}
+                transition={{ duration: 0.6, ease: EASE_OUT }}
+              >
+                {dish.name}
+              </motion.p>
             </AnimatePresence>
-          </motion.div>
+          </div>
+          <div className="mx-auto mt-4 h-px w-24 bg-brass/60 lg:mr-0" />
+          <p className="mt-4 font-serif text-2xl text-brass">{formatPrice(dish.priceCents)}</p>
         </div>
 
-        {/* Title + glass card */}
-        <div className="relative min-w-0 space-y-6">
-          <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
-              Demo Bistro · {dish.category}
-            </p>
-            <h2 className="font-display text-5xl leading-[0.95] text-slate-900 sm:text-6xl" aria-live="polite">
-              <span className="sr-only" data-testid="hero-dish-name">
-                {dish.name}
-              </span>
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span key={dish.name} className="block">
-                  <RevealTitle light={dish.light} bold={dish.bold} reduce={reduce} />
-                </motion.span>
-              </AnimatePresence>
-            </h2>
-          </div>
-
-          <div className="rounded-3xl border border-white/70 bg-white/65 p-5 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.35)] backdrop-blur-xl">
-            <div className="flex items-start gap-4">
-              <motion.div
-                key={`count-${dish.name}`}
-                initial={reduce ? false : { rotateY: -90, opacity: 0 }}
-                animate={{ rotateY: 0, opacity: 1 }}
-                transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.3 }}
-                className="grid size-16 shrink-0 place-items-center rounded-2xl text-white shadow-lg [transform-style:preserve-3d]"
-                style={{ backgroundColor: dish.accent }}
-              >
-                <span className="text-center leading-none">
-                  <span className="block text-2xl font-extrabold">{dish.allergens.length}</span>
-                  <span className="text-[10px] font-semibold uppercase tracking-wide">allergens</span>
-                </span>
-              </motion.div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline justify-between gap-2">
-                  <p className="font-semibold text-slate-900">Allergen check</p>
-                  <p className="text-sm font-semibold text-slate-700">{formatPrice(dish.priceCents)}</p>
-                </div>
-                <p className="mt-0.5 text-sm text-slate-600">
-                  {dish.allergens.length
-                    ? `Contains ${formatAllergens(dish.allergens)} — calculated from every ingredient and sauce.`
-                    : "No major allergens — calculated from every ingredient and sauce."}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 border-t border-slate-200/70 pt-4">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Try it — I&apos;m allergic to:</p>
-              <div className="flex flex-wrap gap-1.5">
-                {TRY_ALLERGENS.map((code) => {
-                  const on = avoid.includes(code);
-                  return (
-                    <motion.button
-                      key={code}
-                      type="button"
-                      whileTap={{ scale: 0.92 }}
-                      aria-pressed={on}
-                      data-testid={`hero-try-${code}`}
-                      onClick={() => setAvoid((a) => (on ? a.filter((c) => c !== code) : [...a, code]))}
-                      className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
-                        on ? "border-red-600 bg-red-600 text-white" : "border-slate-300 bg-white/80 text-slate-700 hover:bg-white"
-                      }`}
-                    >
-                      {allergenLabel(code)}
-                    </motion.button>
-                  );
-                })}
-              </div>
-              <div className="mt-3 [perspective:600px]">
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.p
-                    key={`${dish.name}-${matches.join(",")}-${avoid.length === 0}`}
-                    data-testid="hero-verdict"
-                    initial={reduce ? { opacity: 0 } : { rotateX: -90, opacity: 0 }}
-                    animate={{ rotateX: 0, opacity: 1 }}
-                    exit={reduce ? { opacity: 0 } : { rotateX: 90, opacity: 0 }}
-                    transition={{ duration: 0.32, ease: EASE_OUT }}
-                    className={`inline-flex rounded-xl px-3 py-1.5 text-sm font-semibold ${
-                      avoid.length === 0
-                        ? "bg-slate-100 text-slate-700"
-                        : matches.length
-                          ? "bg-red-50 text-red-800"
-                          : "bg-emerald-50 text-emerald-800"
-                    }`}
+        {/* Centre: the plate under a spotlight, turning slowly */}
+        <div className="order-1 mx-auto w-[min(72vw,460px)] lg:order-2">
+          <div className="relative aspect-square">
+            <div aria-hidden className="absolute -inset-[18%] rounded-full bg-[radial-gradient(circle,rgba(243,237,226,0.16),transparent_62%)]" />
+            <RimText text={rim} reduce={reduce} />
+            <AllergenArcs dish={dish} reduce={reduce} />
+            <div className="absolute inset-[7%]">
+              <AnimatePresence initial={false} mode="popLayout">
+                <motion.div
+                  key={dish.name}
+                  className="absolute inset-0"
+                  initial={reduce ? { opacity: 0 } : { x: "70%", y: "-60%", rotate: 140, scale: 0.6, opacity: 0 }}
+                  animate={
+                    reduce
+                      ? { opacity: 1 }
+                      : { x: ["70%", "28%", "0%"], y: ["-60%", "-12%", "0%"], rotate: [140, 40, 0], scale: [0.6, 0.95, 1], opacity: [0, 1, 1] }
+                  }
+                  exit={
+                    reduce
+                      ? { opacity: 0 }
+                      : { x: "-55%", y: "-55%", rotate: -120, scale: 0.6, opacity: 0, transition: { duration: 0.45, ease: [0.7, 0, 0.84, 0] } }
+                  }
+                  transition={{ duration: reduce ? 0.2 : 0.75, ease: EASE_OUT, times: [0, 0.55, 1] }}
+                >
+                  <div aria-hidden className="absolute inset-[4%] translate-x-[6%] translate-y-[9%] rounded-full bg-black/70 blur-2xl" />
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_32%_26%,#fbf8f2_0%,#e9e2d6_58%,#bfb5a4_100%)] p-[5%] shadow-[inset_0_-8px_18px_rgba(0,0,0,0.18),0_1px_0_rgba(255,255,255,0.6)]"
+                    animate={reduce ? undefined : { rotate: 360 }}
+                    transition={{ duration: 60, ease: "linear", repeat: Infinity }}
                   >
-                    {avoid.length === 0
-                      ? "Pick an allergy to check this dish"
-                      : matches.length
-                        ? `Contains: ${formatAllergens(matches)}`
-                        : "Safe for you"}
-                  </motion.p>
-                </AnimatePresence>
-              </div>
+                    <div className="relative size-full overflow-hidden rounded-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]">
+                      <Image
+                        src={dish.image}
+                        alt={dish.name}
+                        fill
+                        sizes="(min-width: 1024px) 440px, 72vw"
+                        priority={index === 0}
+                        className="object-cover"
+                      />
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </AnimatePresence>
             </div>
+          </div>
+        </div>
+
+        {/* Right: the allergen check */}
+        <div className="order-3 min-w-0 text-center lg:text-left">
+          <p className="text-[11px] uppercase tracking-[0.35em] text-mist">Allergen check</p>
+          <ul className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1.5 lg:justify-start">
+            {dish.allergens.length === 0 ? (
+              <li className="font-serif text-xl italic text-emerald-300">No major allergens</li>
+            ) : (
+              dish.allergens.map((code) => (
+                <li key={code} className="flex items-center gap-2 font-serif text-xl text-ivory">
+                  <span className="size-2 rounded-full" style={{ backgroundColor: ALLERGEN_COLORS[code] }} aria-hidden />
+                  {allergenLabel(code)}
+                </li>
+              ))
+            )}
+          </ul>
+
+          <div className="mx-auto mt-5 h-px w-24 bg-ivory/15 lg:ml-0" />
+          <p className="mt-5 text-[11px] uppercase tracking-[0.35em] text-mist">I&apos;m allergic to</p>
+          <div className="mt-3 flex flex-wrap justify-center gap-1.5 lg:justify-start">
+            {TRY_ALLERGENS.map((code) => {
+              const on = avoid.includes(code);
+              return (
+                <button
+                  key={code}
+                  type="button"
+                  aria-pressed={on}
+                  data-testid={`hero-try-${code}`}
+                  onClick={() => setAvoid((a) => (on ? a.filter((c) => c !== code) : [...a, code]))}
+                  className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+                    on ? "border-ivory bg-ivory text-ink" : "border-ivory/20 text-ivory/80 hover:border-ivory/50"
+                  }`}
+                >
+                  {allergenLabel(code)}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-4 [perspective:600px]">
+            <motion.p
+              key={`${dish.name}-${matches.join(",")}-${avoid.length}`}
+              animate={reduce ? { opacity: [0, 1] } : { rotateX: [-90, 0], opacity: [0, 1] }}
+              transition={{ duration: 0.4, ease: EASE_OUT }}
+              data-testid="hero-verdict"
+              className={`font-serif text-3xl italic ${
+                avoid.length === 0 ? "text-mist" : matches.length ? "text-red-400" : "text-emerald-300"
+              }`}
+            >
+              {avoid.length === 0 ? "Pick an allergy" : matches.length ? `Contains: ${formatAllergens(matches)}` : "Safe for you"}
+            </motion.p>
           </div>
         </div>
       </div>
 
-      {/* Dish strip with a sliding highlight */}
-      <div className="mt-8 flex min-w-0 items-center justify-center gap-1 sm:gap-3">
+      {/* Course selector */}
+      <div className="mt-10 flex items-center justify-center gap-1 sm:gap-2">
         <button
           type="button"
           onClick={() => go(index - 1)}
           aria-label="Previous dish"
           data-testid="hero-prev"
-          className="grid size-9 shrink-0 place-items-center rounded-full text-slate-600 hover:bg-white sm:size-10"
+          className="grid size-9 shrink-0 place-items-center rounded-full text-ivory/70 hover:text-ivory"
         >
-          ‹
+          ←
         </button>
-        <ul className="flex min-w-0 gap-0.5 overflow-x-auto sm:gap-2">
+        <ul className="flex min-w-0 gap-1.5 overflow-x-auto p-1.5 sm:gap-2.5">
           {dishes.map((d, i) => (
             <li key={d.name}>
               <button
@@ -287,19 +261,22 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
                 aria-label={`Show ${d.name}`}
                 aria-current={i === index}
                 data-testid={`hero-thumb-${testIdFor(d.name)}`}
-                className="relative grid w-12 shrink-0 place-items-center rounded-2xl px-1 py-2 sm:w-20"
+                className="relative grid size-10 shrink-0 place-items-center rounded-full sm:size-12"
               >
                 {i === index && (
                   <motion.span
-                    layoutId="hero-thumb-highlight"
-                    className="absolute inset-0 rounded-2xl bg-white shadow-md"
-                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    layoutId="hero-thumb-ring"
+                    className="absolute -inset-1 rounded-full border border-brass"
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
                   />
                 )}
-                <span className="relative size-9 overflow-hidden rounded-full ring-2 ring-white sm:size-12">
+                <span
+                  className={`relative size-full overflow-hidden rounded-full transition-opacity ${
+                    i === index ? "opacity-100" : "opacity-45 hover:opacity-80"
+                  }`}
+                >
                   <Image src={d.image} alt="" fill sizes="48px" className="object-cover" />
                 </span>
-                <span className="relative mt-1 hidden truncate text-[11px] font-medium text-slate-600 sm:block">{d.bold}</span>
               </button>
             </li>
           ))}
@@ -309,21 +286,19 @@ export function PlateHero({ dishes }: { dishes: HeroDish[] }) {
           onClick={() => go(index + 1)}
           aria-label="Next dish"
           data-testid="hero-next"
-          className="grid size-9 shrink-0 place-items-center rounded-full text-slate-600 hover:bg-white sm:size-10"
+          className="grid size-9 shrink-0 place-items-center rounded-full text-ivory/70 hover:text-ivory"
         >
-          ›
+          →
         </button>
-        {!reduce && (
-          <button
-            type="button"
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? "Play dish slideshow" : "Pause dish slideshow"}
-            data-testid="hero-pause"
-            className="grid size-9 shrink-0 place-items-center rounded-full text-slate-600 hover:bg-white sm:ml-1 sm:size-10"
-          >
-            {paused ? "▶" : "❚❚"}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => setPaused((p) => !p)}
+          aria-label={paused ? "Play dish slideshow" : "Pause dish slideshow"}
+          data-testid="hero-pause"
+          className="ml-1 grid size-9 shrink-0 place-items-center rounded-full text-xs text-ivory/60 hover:text-ivory"
+        >
+          {paused ? "▶" : "❚❚"}
+        </button>
       </div>
     </section>
   );
