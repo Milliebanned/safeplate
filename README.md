@@ -1,6 +1,6 @@
 # SafePlate
 
-**Allergen-safe menus for restaurants — verified on every pull request.**
+**Allergen-safe menus for restaurants, verified on every pull request.**
 
 🔗 **Live app:** https://safeplate.milliebanned.xyz
 🍽️ **Demo menu (no sign-up):** https://safeplate.milliebanned.xyz/m/demo-bistro

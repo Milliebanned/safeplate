@@ -1,4 +1,4 @@
-# SafePlate — Product Requirements Document
+# SafePlate: Product Requirements Document
 
 **Live app:** https://safeplate.milliebanned.xyz
 **Repository:** https://github.com/Milliebanned/safeplate
@@ -36,19 +36,19 @@ Celery, Crustaceans, Eggs, Fish, Gluten, Lupin, Milk, Molluscs, Mustard, Peanuts
 
 ## 5. Pages and features
 
-### 5.1 Home page — `/`
+### 5.1 Home page (`/`)
 - Explains the product in one sentence and shows three steps: add ingredients → build dishes → share your menu.
 - **"View demo menu"** button opens the public menu of the sample restaurant "Demo Bistro" (`/m/demo-bistro`) without signing in.
 - **"Create free account"** button opens `/signup`. **"Log in"** link opens `/login`.
 - After logging out, the home page shows: **"You have been logged out."**
 
-### 5.2 Sign up — `/signup`
+### 5.2 Sign up (`/signup`)
 Fields: Restaurant name, Email, Password, Confirm password.
 
 | Rule | Error message |
 |---|---|
 | Restaurant name empty | `Restaurant name is required` |
-| Restaurant name shorter than 2 or longer than 60 characters | `Restaurant name must be 2–60 characters` |
+| Restaurant name shorter than 2 or longer than 60 characters | `Restaurant name must be 2 to 60 characters` |
 | Email empty or not a valid email | `Enter a valid email address` |
 | Email already registered (case-insensitive) | `An account with this email already exists` |
 | Password shorter than 8 characters | `Password must be at least 8 characters` |
@@ -56,7 +56,7 @@ Fields: Restaurant name, Email, Password, Confirm password.
 
 On success, the owner is signed in and sent to `/dashboard`, which shows **"Welcome to SafePlate, {Restaurant name}!"**. The restaurant's public menu address is created from its name, e.g. "Luna Café" → `/m/luna-cafe`. If that address is taken, a number is added (`luna-cafe-2`).
 
-### 5.3 Log in — `/login`
+### 5.3 Log in (`/login`)
 Fields: Email, Password.
 - Wrong email or password → `Incorrect email or password`
 - On success → `/dashboard`.
@@ -65,16 +65,16 @@ Fields: Email, Password.
 ### 5.4 Log out
 A **"Log out"** button is always visible in the dashboard navigation. It ends the session and returns to `/` with "You have been logged out." After logging out, `/dashboard` is no longer accessible.
 
-### 5.5 Dashboard overview — `/dashboard`
+### 5.5 Dashboard overview (`/dashboard`)
 - Shows counts: **Ingredients**, **Sub-recipes**, **Dishes**, **Published dishes**.
 - Shows the restaurant's public menu link and a **QR code** that opens it, ready to print for tables.
 - Navigation: Overview, Ingredients, Sub-recipes, Dishes, Settings, View public menu, Log out.
 - A brand-new restaurant shows a getting-started message: **"Your menu is empty. Start by adding ingredients, or load the sample menu from Settings."**
 
-### 5.6 Ingredients — `/dashboard/ingredients`
+### 5.6 Ingredients (`/dashboard/ingredients`)
 - A list of all ingredients, sorted A→Z, each showing its allergen badges. An ingredient with no allergens shows "No major allergens".
 - **Search box** filters the list by name as you type. If nothing matches: `No ingredients match "{query}"`.
-- Empty state: **"No ingredients yet — add your first one."**
+- Empty state: **"No ingredients yet. Add your first one."**
 - **Add ingredient:** a name plus 14 allergen checkboxes.
 - **Edit ingredient:** change the name and/or allergens.
 - **Delete ingredient:** a two-step confirmation (Delete → Confirm delete). An ingredient that is used in a sub-recipe or dish cannot be deleted.
@@ -89,9 +89,9 @@ A **"Log out"** button is always visible in the dashboard navigation. It ends th
 | Name already exists in this restaurant (case-insensitive) | `An ingredient named "{name}" already exists` |
 | Delete while in use | `Can't delete "{name}": it is used in {list of sub-recipes/dishes}.` |
 
-### 5.7 Sub-recipes — `/dashboard/recipes`
+### 5.7 Sub-recipes (`/dashboard/recipes`)
 - A list of sub-recipes, sorted A→Z, each showing its **calculated allergens** and its components.
-- Empty state: **"No sub-recipes yet — create one to reuse sauces, dressings and bases."**
+- Empty state: **"No sub-recipes yet. Create one to reuse sauces, dressings and bases."**
 - **Create / edit:** a name plus a selection of components (any ingredients and any other sub-recipes).
 - **Delete:** two-step confirmation. A sub-recipe used elsewhere cannot be deleted.
 
@@ -104,9 +104,9 @@ A **"Log out"** button is always visible in the dashboard navigation. It ends th
 | Would create a cycle | `"{name}" can't include "{other}" because "{other}" already contains "{name}".` |
 | Delete while in use | `Can't delete "{name}": it is used in {list}.` |
 
-### 5.8 Dishes — `/dashboard/dishes`
+### 5.8 Dishes (`/dashboard/dishes`)
 - A list of dishes grouped by category (Starters, Mains, Sides, Desserts, Drinks). Each shows its price, its **calculated allergens**, and whether it is **Published** or **Draft**.
-- Empty state: **"No dishes yet — create your first dish."**
+- Empty state: **"No dishes yet. Create your first dish."**
 - **Create / edit fields:** Name, Description (optional, up to 200 characters), Category, Price, Components (ingredients and/or sub-recipes), Published (checkbox).
 - **Delete:** two-step confirmation.
 
@@ -121,16 +121,16 @@ A **"Log out"** button is always visible in the dashboard navigation. It ends th
 
 Prices are shown in US dollars with two decimals, e.g. `$12.50`.
 
-### 5.9 Settings — `/dashboard/settings`
+### 5.9 Settings (`/dashboard/settings`)
 - **Restaurant name** (same rules as sign up).
-- **Public menu address** (`/m/{address}`): 3–40 characters, lowercase letters, numbers and hyphens only. Error for bad format: `Use 3–40 lowercase letters, numbers or hyphens`. Error if taken: `That menu address is already taken`.
+- **Public menu address** (`/m/{address}`): 3 to 40 characters, lowercase letters, numbers and hyphens only. Error for bad format: `Use 3 to 40 lowercase letters, numbers or hyphens`. Error if taken: `That menu address is already taken`.
 - Saving shows: `Settings saved.`
 - **Load sample menu:** replaces this restaurant's ingredients, sub-recipes and dishes with the sample menu (section 7), after a two-step confirmation. It shows: `Sample menu loaded: 23 ingredients, 5 sub-recipes, 9 dishes.` It only ever affects the signed-in owner's own restaurant.
 
-### 5.10 Public menu — `/m/{address}`
+### 5.10 Public menu (`/m/{address}`)
 No sign-in needed. Mobile-first layout.
 - Shows the restaurant name and only **published** dishes, grouped by category, each with price, description and allergen badges. Draft dishes never appear.
-- **"I'm allergic to:"** — 14 toggle buttons, one per allergen.
+- **"I'm allergic to:"** with 14 toggle buttons, one per allergen.
 - With no allergies selected: **"Select your allergies to see which dishes are safe for you."**
 - With allergies selected, every dish shows either **"Safe for you"** or **"Contains: {matching allergens}"**, and a summary line shows **"{X} of {Y} dishes are free from your selected allergens."**
 - **"Hide dishes that aren't safe"** checkbox hides the dishes marked "Contains".
@@ -139,7 +139,7 @@ No sign-in needed. Mobile-first layout.
 - An unknown address shows a **"Menu not found"** page.
 - Every public menu shows the notice: **"Allergen information is provided by the restaurant. Always tell your server about your allergies."**
 
-### 5.11 Health check — `/api/health`
+### 5.11 Health check (`/api/health`)
 Returns JSON `{"status":"ok","database":"ok"}` when the app and database are working.
 
 ## 6. Security and data rules

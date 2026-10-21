@@ -36,7 +36,7 @@ export function allergenLabel(code: string): string {
   return LABELS.get(code) ?? code;
 }
 
-/** "Milk, Sesame" — or "" for an empty list. */
+/** "Milk, Sesame", or "" for an empty list. */
 export function formatAllergens(codes: Iterable<string>): string {
   return sortAllergens(codes).map(allergenLabel).join(", ");
 }

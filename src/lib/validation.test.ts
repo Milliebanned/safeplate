@@ -15,8 +15,8 @@ import {
 describe("sign-up fields", () => {
   it("validates the restaurant name", () => {
     expect(validateRestaurantName("  ")).toBe("Restaurant name is required");
-    expect(validateRestaurantName("A")).toBe("Restaurant name must be 2–60 characters");
-    expect(validateRestaurantName("x".repeat(61))).toBe("Restaurant name must be 2–60 characters");
+    expect(validateRestaurantName("A")).toBe("Restaurant name must be 2 to 60 characters");
+    expect(validateRestaurantName("x".repeat(61))).toBe("Restaurant name must be 2 to 60 characters");
     expect(validateRestaurantName("Luna Café")).toBeNull();
   });
 
@@ -77,8 +77,8 @@ describe("menu addresses", () => {
   });
 
   it("validates custom addresses", () => {
-    expect(validateSlug("ok")).toBe("Use 3–40 lowercase letters, numbers or hyphens");
-    expect(validateSlug("Has Caps")).toBe("Use 3–40 lowercase letters, numbers or hyphens");
+    expect(validateSlug("ok")).toBe("Use 3 to 40 lowercase letters, numbers or hyphens");
+    expect(validateSlug("Has Caps")).toBe("Use 3 to 40 lowercase letters, numbers or hyphens");
     expect(validateSlug("luna-cafe-2")).toBeNull();
   });
 });

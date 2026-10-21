@@ -1,4 +1,4 @@
-// Field rules and the exact error messages from the PRD (sections 5.2–5.9).
+// Field rules and the exact error messages from the PRD (sections 5.2 to 5.9).
 
 export type ItemKind = "ingredient" | "sub-recipe" | "dish";
 
@@ -9,7 +9,7 @@ const PRICE_RE = /^\d+(\.\d{1,2})?$/;
 export function validateRestaurantName(value: string): string | null {
   const name = value.trim();
   if (!name) return "Restaurant name is required";
-  if (name.length < 2 || name.length > 60) return "Restaurant name must be 2–60 characters";
+  if (name.length < 2 || name.length > 60) return "Restaurant name must be 2 to 60 characters";
   return null;
 }
 
@@ -53,14 +53,14 @@ export function formatPrice(cents: number): string {
 }
 
 export function validateSlug(value: string): string | null {
-  return SLUG_RE.test(value) ? null : "Use 3–40 lowercase letters, numbers or hyphens";
+  return SLUG_RE.test(value) ? null : "Use 3 to 40 lowercase letters, numbers or hyphens";
 }
 
 /** "Luna Café" → "luna-cafe". Always returns a valid slug. */
 export function slugify(value: string): string {
   const slug = value
     .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")

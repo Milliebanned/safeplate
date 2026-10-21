@@ -1,4 +1,4 @@
-# Agent instructions — SafePlate
+# Agent instructions for SafePlate
 
 SafePlate tells restaurant guests which dishes are safe for their allergies. A wrong answer can put someone in hospital, so **every change is verified before it ships.** These rules apply to every coding agent and every human contributor.
 
