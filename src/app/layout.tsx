@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,13 +13,20 @@ const display = Bricolage_Grotesque({
   weight: ["200", "300", "500", "700", "800"],
 });
 
+const serif = Instrument_Serif({
+  variable: "--font-serif-face",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: { default: "SafePlate — allergen-safe menus", template: "%s · SafePlate" },
+  title: { default: "SafePlate | Allergen-safe menus for restaurants", template: "%s | SafePlate" },
   description:
     "SafePlate calculates the allergens in every dish from its ingredients and gives your restaurant a public menu customers can filter by allergy.",
 };
@@ -28,7 +35,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} ${display.variable} h-full antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} ${display.variable} ${serif.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">{children}</body>
     </html>
   );
