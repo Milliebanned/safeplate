@@ -7,6 +7,7 @@ import { ingredients } from "@/db/schema";
 import { type ActionResult, isUniqueViolation } from "@/lib/action-result";
 import { sortAllergens } from "@/lib/allergens";
 import { requireOwner } from "@/lib/auth";
+import { ingredientSavedMessage } from "@/lib/components";
 import { loadMenu } from "@/lib/menu";
 import { duplicateNameMessage, joinNames, validateItemName } from "@/lib/validation";
 
@@ -52,7 +53,7 @@ export async function saveIngredient(input: {
   }
 
   revalidatePath("/", "layout");
-  return { ok: true, message: `Ingredient "${name}" ${input.id ? "updated" : "added"}.` };
+  return { ok: true, message: ingredientSavedMessage(name, allergens, input.id ? "updated" : "added") };
 }
 
 export async function deleteIngredient(id: string): Promise<ActionResult> {
