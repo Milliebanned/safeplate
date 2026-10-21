@@ -189,6 +189,8 @@ The public demo restaurant **Demo Bistro** (`/m/demo-bistro`) and the "Load samp
 | Gluten, Peanuts | 5 of 8 dishes are free from your selected allergens. | Hummus & Pita, Peanut Noodles, Chocolate Brownie |
 | Celery | 8 of 8 dishes are free from your selected allergens. | none (Celery Soup is a draft and never shown) |
 
+**Empty Kitchen** (`/m/empty-kitchen`) is a permanent restaurant with no dishes. Its public menu always shows: "This restaurant hasn't published any dishes yet."
+
 ## 8. Out of scope (for now)
 - Multiple restaurants per account, staff accounts, and roles.
 - Menu translations and "may contain" (cross-contamination) labels. These are planned as follow-up features, each delivered in its own tested pull request.
