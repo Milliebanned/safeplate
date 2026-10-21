@@ -12,9 +12,9 @@ export default async function DishesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900">Dishes</h1>
-        <p className="mt-1 text-slate-600">
-          Build dishes from ingredients and sub-recipes. Allergens are calculated for you — you never type them twice.
+        <h1 className="font-serif text-5xl leading-none text-ink">Dishes</h1>
+        <p className="mt-1 text-stone-600">
+          Build dishes from ingredients and sub-recipes. Allergens are calculated for you, so you never type them twice.
         </p>
       </div>
       <DishManager dishes={menu.dishes} options={pickerOptions(menu)} />

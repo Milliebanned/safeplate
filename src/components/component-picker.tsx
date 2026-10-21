@@ -41,11 +41,11 @@ export function ComponentPicker({
 
   return (
     <fieldset aria-describedby={error ? "error-components" : undefined}>
-      <legend className="mb-1 text-sm font-medium text-slate-800">
-        Components <span className="font-normal text-slate-500">({selected.length} selected)</span>
+      <legend className="mb-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-600">
+        Components <span className="normal-case tracking-normal text-stone-500">({selected.length} selected)</span>
       </legend>
       {options.length === 0 ? (
-        <p className="text-sm text-slate-600">Add ingredients first, then come back to build this.</p>
+        <p className="text-sm text-stone-600">Add ingredients first, then come back to build this.</p>
       ) : (
         <>
           <label htmlFor="component-search" className="sr-only">
@@ -60,28 +60,28 @@ export function ComponentPicker({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <div className="max-h-72 space-y-3 overflow-y-auto rounded-lg border border-slate-200 p-3">
-            {groups.length === 0 && <p className="text-sm text-slate-600">Nothing matches &quot;{query.trim()}&quot;</p>}
+          <div className="max-h-72 space-y-3 overflow-y-auto rounded-2xl border border-stone-300/70 bg-white/40 p-3">
+            {groups.length === 0 && <p className="text-sm text-stone-600">Nothing matches &quot;{query.trim()}&quot;</p>}
             {groups.map((group) => (
               <div key={group.title}>
-                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{group.title}</p>
+                <p className="mb-1 text-[11px] uppercase tracking-[0.2em] text-stone-500">{group.title}</p>
                 <ul className="space-y-1">
                   {group.items.map((option) => {
                     const id = `component-${option.kind}-${testIdFor(option.name)}`;
                     return (
                       <li key={key(option)}>
-                        <label htmlFor={id} className="flex cursor-pointer items-start gap-2 rounded-md px-2 py-1.5 hover:bg-slate-50">
+                        <label htmlFor={id} className="flex cursor-pointer items-start gap-2 rounded-xl px-2 py-1.5 hover:bg-stone-200/40">
                           <input
                             id={id}
                             type="checkbox"
                             data-testid={id}
                             aria-label={option.name}
-                            className="mt-1 size-4 accent-emerald-600"
+                            className="mt-1 size-4 accent-[#0d0c0a]"
                             checked={chosen.has(key(option))}
                             onChange={(e) => toggle(option, e.target.checked)}
                           />
                           <span className="flex flex-col gap-1">
-                            <span className="text-sm font-medium text-slate-900">{option.name}</span>
+                            <span className="text-sm font-serif text-xl text-ink">{option.name}</span>
                             <AllergenBadges allergens={option.allergens} testId={`${id}-allergens`} />
                           </span>
                         </label>

@@ -4,11 +4,11 @@ export type Flash = { kind: "success" | "error"; text: string } | null;
 export function FlashMessage({ flash }: { flash: Flash }) {
   if (!flash) return null;
   return flash.kind === "success" ? (
-    <p role="status" data-testid="flash-success" className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">
+    <p role="status" data-testid="flash-success" className="rounded-full border border-emerald-700/20 bg-emerald-700/10 px-5 py-2.5 text-sm text-emerald-900">
       {flash.text}
     </p>
   ) : (
-    <p role="alert" data-testid="flash-error" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-900">
+    <p role="alert" data-testid="flash-error" className="rounded-full border border-red-700/20 bg-red-700/10 px-5 py-2.5 text-sm text-red-900">
       {flash.text}
     </p>
   );

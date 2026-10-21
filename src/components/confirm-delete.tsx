@@ -20,7 +20,7 @@ export function ConfirmDelete({
     return (
       <button
         type="button"
-        className="rounded-lg px-3 py-1.5 text-sm font-semibold text-red-700 hover:bg-red-50"
+        className="rounded-full px-3 py-1.5 text-sm font-semibold text-red-700 hover:bg-red-700/10"
         onClick={() => setAsking(true)}
         disabled={disabled}
         data-testid={`delete-${testId}`}

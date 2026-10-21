@@ -39,7 +39,7 @@ export function SettingsForms({ name, slug, baseUrl }: { name: string; slug: str
       <FlashMessage flash={flash} />
 
       <form onSubmit={submit} noValidate className={`${cardClass} space-y-4`} data-testid="settings-form">
-        <h2 className="text-lg font-semibold text-slate-900">Restaurant details</h2>
+        <h2 className="font-serif text-2xl text-ink">Restaurant details</h2>
         <div>
           <label htmlFor="settings-name" className={labelClass}>
             Restaurant name
@@ -60,7 +60,7 @@ export function SettingsForms({ name, slug, baseUrl }: { name: string; slug: str
             Public menu address
           </label>
           <div className="flex items-center gap-1">
-            <span className="shrink-0 text-sm text-slate-500">{baseUrl}/m/</span>
+            <span className="shrink-0 text-sm text-stone-500">{baseUrl}/m/</span>
             <input
               id="settings-slug"
               data-testid="settings-slug"
@@ -71,8 +71,8 @@ export function SettingsForms({ name, slug, baseUrl }: { name: string; slug: str
               onChange={(e) => setValues((v) => ({ ...v, slug: e.target.value }))}
             />
           </div>
-          <p id="help-settings-slug" className="mt-1 text-xs text-slate-500">
-            3–40 lowercase letters, numbers or hyphens.
+          <p id="help-settings-slug" className="mt-1 text-xs text-stone-500">
+            3 to 40 lowercase letters, numbers or hyphens.
           </p>
           <FieldError id="error-settings-slug" message={errors.slug} />
         </div>
@@ -82,11 +82,11 @@ export function SettingsForms({ name, slug, baseUrl }: { name: string; slug: str
       </form>
 
       <section className={`${cardClass} space-y-3`} aria-labelledby="sample-menu">
-        <h2 id="sample-menu" className="text-lg font-semibold text-slate-900">
+        <h2 id="sample-menu" className="font-serif text-2xl text-ink">
           Sample menu
         </h2>
-        <p className="text-sm text-slate-600">
-          Replace all of your ingredients, sub-recipes and dishes with the SafePlate sample menu — handy for exploring
+        <p className="text-sm text-stone-600">
+          Replace all of your ingredients, sub-recipes and dishes with the SafePlate sample menu. Useful for exploring
           or starting over. This only affects your restaurant.
         </p>
         {confirming ? (

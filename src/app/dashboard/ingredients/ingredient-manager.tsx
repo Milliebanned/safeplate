@@ -59,7 +59,7 @@ export function IngredientManager({ ingredients }: { ingredients: IngredientView
       <FlashMessage flash={flash} />
 
       <form onSubmit={submit} noValidate className={`${cardClass} space-y-4`} data-testid="ingredient-form">
-        <h2 className="text-lg font-semibold text-slate-900">{editing ? "Edit ingredient" : "Add ingredient"}</h2>
+        <h2 className="font-serif text-2xl text-ink">{editing ? "Edit ingredient" : "Add ingredient"}</h2>
         <div>
           <label htmlFor="ingredient-name" className={labelClass}>
             Ingredient name
@@ -103,8 +103,8 @@ export function IngredientManager({ ingredients }: { ingredients: IngredientView
 
       <section aria-labelledby="ingredient-list" className="space-y-3">
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <h2 id="ingredient-list" className="text-lg font-semibold text-slate-900">
-            All ingredients <span className="text-slate-500">({ingredients.length})</span>
+          <h2 id="ingredient-list" className="font-serif text-2xl text-ink">
+            All ingredients <span className="text-stone-500">({ingredients.length})</span>
           </h2>
           <div className="w-full sm:w-64">
             <label htmlFor="ingredient-search" className="sr-only">
@@ -123,15 +123,15 @@ export function IngredientManager({ ingredients }: { ingredients: IngredientView
         </div>
 
         {ingredients.length === 0 ? (
-          <p className={`${cardClass} text-slate-600`} data-testid="ingredients-empty">
-            No ingredients yet — add your first one.
+          <p className={`${cardClass} text-stone-600`} data-testid="ingredients-empty">
+            No ingredients yet. Add your first one.
           </p>
         ) : visible.length === 0 ? (
-          <p className={`${cardClass} text-slate-600`} data-testid="ingredients-no-match">
+          <p className={`${cardClass} text-stone-600`} data-testid="ingredients-no-match">
             No ingredients match &quot;{query.trim()}&quot;
           </p>
         ) : (
-          <ul className="divide-y divide-slate-200/70 overflow-hidden rounded-3xl border border-white/80 bg-white/80 shadow-[0_14px_34px_-22px_rgba(15,23,42,0.4)] backdrop-blur" data-testid="ingredient-list">
+          <ul className="divide-y divide-stone-300/70 overflow-hidden rounded-[1.75rem] border border-stone-300/70 bg-[#fbf8f2]" data-testid="ingredient-list">
             {visible.map((ingredient) => {
               const id = testIdFor(ingredient.name);
               return (
@@ -141,7 +141,7 @@ export function IngredientManager({ ingredients }: { ingredients: IngredientView
                   data-testid={`ingredient-row-${id}`}
                 >
                   <div className="space-y-1.5">
-                    <p className="font-medium text-slate-900" data-testid="ingredient-row-name">
+                    <p className="font-serif text-xl text-ink" data-testid="ingredient-row-name">
                       {ingredient.name}
                     </p>
                     <AllergenBadges allergens={ingredient.allergens} />
@@ -149,7 +149,7 @@ export function IngredientManager({ ingredients }: { ingredients: IngredientView
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
-                      className="rounded-lg px-3 py-1.5 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+                      className="rounded-full px-3 py-1.5 text-sm font-semibold text-ink underline decoration-stone-300 underline-offset-4 hover:decoration-ink"
                       onClick={() => startEdit(ingredient)}
                       data-testid={`edit-${id}`}
                       aria-label={`Edit ${ingredient.name}`}

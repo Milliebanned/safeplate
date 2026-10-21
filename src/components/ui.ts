@@ -1,12 +1,11 @@
-// Shared class names so every form and button looks and behaves the same.
+// Shared class names for the owner dashboard ("ivory ledger" style) and auth forms.
 export const inputClass =
-  "block w-full rounded-xl border border-slate-300 bg-white/90 px-3.5 py-2.5 text-slate-900 shadow-sm focus:border-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-600/15";
-export const labelClass = "mb-1.5 block text-sm font-medium text-slate-800";
+  "block w-full rounded-xl border border-stone-300 bg-[#fbf8f2] px-3.5 py-2.5 text-ink placeholder:text-stone-400 focus:border-ink focus:outline-none focus:ring-4 focus:ring-[#d4a24c]/20";
+export const labelClass = "mb-1.5 block text-[11px] font-medium uppercase tracking-[0.18em] text-stone-600";
 export const primaryButton =
-  "inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-ivory hover:bg-black disabled:cursor-not-allowed disabled:opacity-60";
 export const secondaryButton =
-  "inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white/90 px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-white disabled:opacity-60";
+  "inline-flex items-center justify-center rounded-full border border-stone-300 bg-transparent px-5 py-2.5 text-sm font-semibold text-ink hover:border-ink disabled:opacity-60";
 export const dangerButton =
-  "inline-flex items-center justify-center rounded-xl bg-red-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-60";
-export const cardClass =
-  "rounded-3xl border border-white/80 bg-white/80 p-5 shadow-[0_14px_34px_-22px_rgba(15,23,42,0.4)] backdrop-blur";
+  "inline-flex items-center justify-center rounded-full bg-red-700 px-4 py-1.5 text-sm font-semibold text-white hover:bg-red-800 disabled:opacity-60";
+export const cardClass = "rounded-[1.75rem] border border-stone-300/70 bg-[#fbf8f2] p-6";

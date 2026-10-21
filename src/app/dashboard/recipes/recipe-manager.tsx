@@ -52,7 +52,7 @@ export function RecipeManager({ recipes, options }: { recipes: RecipeView[]; opt
       <FlashMessage flash={flash} />
 
       <form onSubmit={submit} noValidate className={`${cardClass} space-y-4`} data-testid="recipe-form">
-        <h2 className="text-lg font-semibold text-slate-900">{editing ? "Edit sub-recipe" : "Create sub-recipe"}</h2>
+        <h2 className="font-serif text-2xl text-ink">{editing ? "Edit sub-recipe" : "Create sub-recipe"}</h2>
         <div>
           <label htmlFor="recipe-name" className={labelClass}>
             Sub-recipe name
@@ -96,15 +96,15 @@ export function RecipeManager({ recipes, options }: { recipes: RecipeView[]; opt
       </form>
 
       <section aria-labelledby="recipe-list" className="space-y-3">
-        <h2 id="recipe-list" className="text-lg font-semibold text-slate-900">
-          All sub-recipes <span className="text-slate-500">({recipes.length})</span>
+        <h2 id="recipe-list" className="font-serif text-2xl text-ink">
+          All sub-recipes <span className="text-stone-500">({recipes.length})</span>
         </h2>
         {recipes.length === 0 ? (
-          <p className={`${cardClass} text-slate-600`} data-testid="recipes-empty">
-            No sub-recipes yet — create one to reuse sauces, dressings and bases.
+          <p className={`${cardClass} text-stone-600`} data-testid="recipes-empty">
+            No sub-recipes yet. Create one to reuse sauces, dressings and bases.
           </p>
         ) : (
-          <ul className="divide-y divide-slate-200/70 overflow-hidden rounded-3xl border border-white/80 bg-white/80 shadow-[0_14px_34px_-22px_rgba(15,23,42,0.4)] backdrop-blur" data-testid="recipe-list">
+          <ul className="divide-y divide-stone-300/70 overflow-hidden rounded-[1.75rem] border border-stone-300/70 bg-[#fbf8f2]" data-testid="recipe-list">
             {recipes.map((recipe) => {
               const id = testIdFor(recipe.name);
               return (
@@ -114,18 +114,18 @@ export function RecipeManager({ recipes, options }: { recipes: RecipeView[]; opt
                   data-testid={`recipe-row-${id}`}
                 >
                   <div className="space-y-1.5">
-                    <p className="font-medium text-slate-900" data-testid="recipe-row-name">
+                    <p className="font-serif text-xl text-ink" data-testid="recipe-row-name">
                       {recipe.name}
                     </p>
                     <AllergenBadges allergens={recipe.allergens} />
-                    <p className="text-sm text-slate-600" data-testid="recipe-row-components">
+                    <p className="text-sm text-stone-600" data-testid="recipe-row-components">
                       Made with: {recipe.components.map((c) => c.name).join(", ")}
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
-                      className="rounded-lg px-3 py-1.5 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+                      className="rounded-full px-3 py-1.5 text-sm font-semibold text-ink underline decoration-stone-300 underline-offset-4 hover:decoration-ink"
                       onClick={() => {
                         setDraft({
                           id: recipe.id,

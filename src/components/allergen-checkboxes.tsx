@@ -13,7 +13,7 @@ export function AllergenCheckboxes({
 }) {
   return (
     <fieldset>
-      <legend className="mb-2 text-sm font-medium text-slate-800">Allergens it contains</legend>
+      <legend className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-600">Allergens it contains</legend>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {ALLERGENS.map((a) => {
           const id = `${idPrefix}-${a.code}`;
@@ -22,15 +22,15 @@ export function AllergenCheckboxes({
             <label
               key={a.code}
               htmlFor={id}
-              className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
-                checked ? "border-amber-400 bg-amber-50 text-amber-950" : "border-slate-200 bg-white text-slate-700"
+              className={`flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2 text-sm ${
+                checked ? "border-ink bg-ink text-ivory" : "border-stone-300/70 bg-white text-stone-700"
               }`}
             >
               <input
                 id={id}
                 type="checkbox"
                 data-testid={`allergen-checkbox-${a.code}`}
-                className="size-4 accent-amber-600"
+                className="size-4 accent-[#d4a24c]"
                 checked={checked}
                 onChange={(e) =>
                   onChange(e.target.checked ? [...selected, a.code] : selected.filter((c) => c !== a.code))

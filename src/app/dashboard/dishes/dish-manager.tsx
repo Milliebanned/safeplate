@@ -63,7 +63,7 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
       <FlashMessage flash={flash} />
 
       <form onSubmit={submit} noValidate className={`${cardClass} space-y-4`} data-testid="dish-form">
-        <h2 className="text-lg font-semibold text-slate-900">{editing ? "Edit dish" : "Create dish"}</h2>
+        <h2 className="font-serif text-2xl text-ink">{editing ? "Edit dish" : "Create dish"}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <label htmlFor="dish-name" className={labelClass}>
@@ -82,7 +82,7 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
           </div>
           <div className="sm:col-span-2">
             <label htmlFor="dish-description" className={labelClass}>
-              Description <span className="font-normal text-slate-500">(optional)</span>
+              Description <span className="font-normal text-stone-500">(optional)</span>
             </label>
             <textarea
               id="dish-description"
@@ -138,16 +138,16 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
           onChange={(components) => set("components", components)}
           error={errors.components}
         />
-        <label htmlFor="dish-published" className="flex items-center gap-2 text-sm font-medium text-slate-800">
+        <label htmlFor="dish-published" className="flex items-center gap-2 text-sm font-medium text-stone-800">
           <input
             id="dish-published"
             type="checkbox"
             data-testid="dish-published"
-            className="size-4 accent-emerald-600"
+            className="size-4 accent-[#0d0c0a]"
             checked={draft.published}
             onChange={(e) => set("published", e.target.checked)}
           />
-          Published — show this dish on the public menu
+          Published: show this dish on the public menu
         </label>
         <div className="flex gap-2">
           <button type="submit" className={primaryButton} disabled={pending} data-testid="dish-submit">
@@ -170,18 +170,18 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
       </form>
 
       <section aria-labelledby="dish-list" className="space-y-3">
-        <h2 id="dish-list" className="text-lg font-semibold text-slate-900">
-          All dishes <span className="text-slate-500">({dishes.length})</span>
+        <h2 id="dish-list" className="font-serif text-2xl text-ink">
+          All dishes <span className="text-stone-500">({dishes.length})</span>
         </h2>
         {dishes.length === 0 ? (
-          <p className={`${cardClass} text-slate-600`} data-testid="dishes-empty">
-            No dishes yet — create your first dish.
+          <p className={`${cardClass} text-stone-600`} data-testid="dishes-empty">
+            No dishes yet. Create your first dish.
           </p>
         ) : (
           CATEGORIES.filter((c) => dishes.some((d) => d.category === c)).map((category) => (
             <div key={category} className="space-y-2" data-testid={`dish-category-${category.toLowerCase()}`}>
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">{category}</h3>
-              <ul className="divide-y divide-slate-200/70 overflow-hidden rounded-3xl border border-white/80 bg-white/80 shadow-[0_14px_34px_-22px_rgba(15,23,42,0.4)] backdrop-blur">
+              <h3 className="text-[11px] uppercase tracking-[0.25em] text-stone-500">{category}</h3>
+              <ul className="divide-y divide-stone-300/70 overflow-hidden rounded-[1.75rem] border border-stone-300/70 bg-[#fbf8f2]">
                 {dishes
                   .filter((d) => d.category === category)
                   .map((dish) => {
@@ -194,30 +194,30 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
                       >
                         <div className="space-y-1.5">
                           <p className="flex flex-wrap items-center gap-2">
-                            <span className="font-medium text-slate-900" data-testid="dish-row-name">
+                            <span className="font-serif text-xl text-ink" data-testid="dish-row-name">
                               {dish.name}
                             </span>
-                            <span className="text-sm text-slate-700" data-testid="dish-row-price">
+                            <span className="text-sm text-stone-700" data-testid="dish-row-price">
                               {formatPrice(dish.priceCents)}
                             </span>
                             <span
                               data-testid="dish-row-status"
                               className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-                                dish.published ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-700"
+                                dish.published ? "bg-emerald-700/10 text-emerald-800" : "bg-stone-200 text-stone-700"
                               }`}
                             >
                               {dish.published ? "Published" : "Draft"}
                             </span>
                           </p>
                           <AllergenBadges allergens={dish.allergens} />
-                          <p className="text-sm text-slate-600" data-testid="dish-row-components">
+                          <p className="text-sm text-stone-600" data-testid="dish-row-components">
                             Made with: {dish.components.map((c) => c.name).join(", ")}
                           </p>
                         </div>
                         <div className="flex items-center gap-1">
                           <button
                             type="button"
-                            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+                            className="rounded-full px-3 py-1.5 text-sm font-semibold text-ink underline decoration-stone-300 underline-offset-4 hover:decoration-ink"
                             onClick={() => {
                               setDraft({
                                 id: dish.id,
