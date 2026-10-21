@@ -52,6 +52,7 @@ export async function loadSampleMenu(tx: Tx, restaurantId: string) {
         category: d.category,
         priceCents: d.priceCents,
         published: d.published,
+        imageUrl: d.image ?? null,
       })),
     )
     .returning({ id: dishes.id, name: dishes.name });

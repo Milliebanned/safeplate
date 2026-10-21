@@ -75,10 +75,12 @@ export const SAMPLE_DISHES: {
   category: Category;
   priceCents: number;
   published: boolean;
+  image?: string;
   components: SampleComponent[];
 }[] = [
   {
     name: "Hummus & Pita",
+    image: "/dishes/hummus-pita.webp",
     description: "Creamy chickpea hummus with warm pita.",
     category: "Starters",
     priceCents: 850,
@@ -87,6 +89,7 @@ export const SAMPLE_DISHES: {
   },
   {
     name: "Garden Salad",
+    image: "/dishes/garden-salad.webp",
     description: "Mixed greens, walnuts and mustard vinaigrette.",
     category: "Starters",
     priceCents: 900,
@@ -103,6 +106,7 @@ export const SAMPLE_DISHES: {
   },
   {
     name: "Peanut Noodles",
+    image: "/dishes/peanut-noodles.webp",
     description: "Rice noodles tossed in our house peanut sauce.",
     category: "Mains",
     priceCents: 1400,
@@ -111,6 +115,7 @@ export const SAMPLE_DISHES: {
   },
   {
     name: "Grilled Salmon",
+    image: "/dishes/grilled-salmon.webp",
     description: "Salmon fillet, potatoes and green goddess dressing.",
     category: "Mains",
     priceCents: 2250,
@@ -124,6 +129,7 @@ export const SAMPLE_DISHES: {
   },
   {
     name: "Garlic Shrimp",
+    image: "/dishes/garlic-shrimp.webp",
     description: "Pan-fried shrimp in garlic butter.",
     category: "Mains",
     priceCents: 1900,
@@ -145,6 +151,7 @@ export const SAMPLE_DISHES: {
   },
   {
     name: "Chocolate Brownie",
+    image: "/dishes/chocolate-brownie.webp",
     description: "Rich dark chocolate brownie.",
     category: "Desserts",
     priceCents: 700,

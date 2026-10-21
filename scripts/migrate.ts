@@ -43,6 +43,19 @@ async function main() {
   } else {
     console.log("migrate: Demo Bistro already exists");
   }
+
+  // Give Demo Bistro's sample dishes their bundled photos (safe to run on every build).
+  const { SAMPLE_DISHES } = await import("../src/lib/sample-menu");
+  const { and, isNull } = await import("drizzle-orm");
+  const { dishes } = await import("../src/db/schema");
+  const [demo] = await db.select({ id: restaurants.id }).from(restaurants).where(eq(restaurants.slug, "demo-bistro"));
+  for (const d of SAMPLE_DISHES) {
+    if (!d.image || !demo) continue;
+    await db
+      .update(dishes)
+      .set({ imageUrl: d.image })
+      .where(and(eq(dishes.restaurantId, demo.id), eq(dishes.name, d.name), isNull(dishes.imageUrl)));
+  }
   await (db.$client as { end: () => Promise<void> }).end();
 }
 
