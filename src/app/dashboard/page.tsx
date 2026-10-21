@@ -35,7 +35,7 @@ export default async function OverviewPage({ searchParams }: PageProps<"/dashboa
       )}
 
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Overview</h1>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900">Overview</h1>
         <p className="mt-1 text-slate-600">{owner.restaurant.name}</p>
       </div>
 
@@ -49,7 +49,7 @@ export default async function OverviewPage({ searchParams }: PageProps<"/dashboa
         {stats.map((stat) => (
           <div key={stat.label} className={cardClass}>
             <dt className="text-sm text-slate-600">{stat.label}</dt>
-            <dd className="mt-1 text-3xl font-bold text-slate-900" data-testid={stat.testId}>
+            <dd className="font-display mt-1 text-4xl font-bold text-slate-900" data-testid={stat.testId}>
               {stat.value}
             </dd>
           </div>

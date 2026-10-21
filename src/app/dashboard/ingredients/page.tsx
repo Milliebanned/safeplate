@@ -11,7 +11,7 @@ export default async function IngredientsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Ingredients</h1>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900">Ingredients</h1>
         <p className="mt-1 text-slate-600">
           Record the allergens in each ingredient once. Every sub-recipe and dish that uses it updates automatically.
         </p>

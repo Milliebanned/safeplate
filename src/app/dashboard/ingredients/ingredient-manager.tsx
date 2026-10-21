@@ -131,7 +131,7 @@ export function IngredientManager({ ingredients }: { ingredients: IngredientView
             No ingredients match &quot;{query.trim()}&quot;
           </p>
         ) : (
-          <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white" data-testid="ingredient-list">
+          <ul className="divide-y divide-slate-200/70 overflow-hidden rounded-3xl border border-white/80 bg-white/80 shadow-[0_14px_34px_-22px_rgba(15,23,42,0.4)] backdrop-blur" data-testid="ingredient-list">
             {visible.map((ingredient) => {
               const id = testIdFor(ingredient.name);
               return (

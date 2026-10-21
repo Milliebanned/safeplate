@@ -12,7 +12,7 @@ export default async function DishesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Dishes</h1>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900">Dishes</h1>
         <p className="mt-1 text-slate-600">
           Build dishes from ingredients and sub-recipes. Allergens are calculated for you — you never type them twice.
         </p>

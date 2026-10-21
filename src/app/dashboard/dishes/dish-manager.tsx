@@ -181,7 +181,7 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
           CATEGORIES.filter((c) => dishes.some((d) => d.category === c)).map((category) => (
             <div key={category} className="space-y-2" data-testid={`dish-category-${category.toLowerCase()}`}>
               <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">{category}</h3>
-              <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+              <ul className="divide-y divide-slate-200/70 overflow-hidden rounded-3xl border border-white/80 bg-white/80 shadow-[0_14px_34px_-22px_rgba(15,23,42,0.4)] backdrop-blur">
                 {dishes
                   .filter((d) => d.category === category)
                   .map((dish) => {

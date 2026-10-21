@@ -104,7 +104,7 @@ export function RecipeManager({ recipes, options }: { recipes: RecipeView[]; opt
             No sub-recipes yet — create one to reuse sauces, dressings and bases.
           </p>
         ) : (
-          <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white" data-testid="recipe-list">
+          <ul className="divide-y divide-slate-200/70 overflow-hidden rounded-3xl border border-white/80 bg-white/80 shadow-[0_14px_34px_-22px_rgba(15,23,42,0.4)] backdrop-blur" data-testid="recipe-list">
             {recipes.map((recipe) => {
               const id = testIdFor(recipe.name);
               return (

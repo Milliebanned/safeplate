@@ -6,7 +6,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
       <div className="mb-8">
         <Logo />
       </div>
-      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">{children}</div>
+      <div className="w-full max-w-md rounded-3xl border border-white/80 bg-white/80 p-6 shadow-[0_24px_60px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl sm:p-8">{children}</div>
     </main>
   );
 }
