@@ -81,8 +81,8 @@ A **"Log out"** button is always visible in the dashboard navigation. It ends th
 
 | Situation | Message |
 |---|---|
-| Added | `Ingredient "{name}" added.` |
-| Updated | `Ingredient "{name}" updated.` |
+| Added | `Ingredient "{name}" added. Contains: {allergens}.` or `Ingredient "{name}" added. Contains no major allergens.` |
+| Updated | `Ingredient "{name}" updated. Contains: {allergens}.` or `Ingredient "{name}" updated. Contains no major allergens.` |
 | Deleted | `Ingredient "{name}" deleted.` |
 | Name empty | `Name is required` |
 | Name longer than 60 characters | `Name must be 60 characters or fewer` |
