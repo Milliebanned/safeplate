@@ -41,9 +41,9 @@ export function SignupForm() {
       <button type="submit" className={`${primaryButton} w-full`} disabled={pending} data-testid="signup-submit">
         {pending ? "Creating account…" : "Create account"}
       </button>
-      <p className="text-center text-sm text-slate-600">
+      <p className="text-center text-sm text-stone-600">
         Already have an account?{" "}
-        <Link href="/login" className="font-semibold text-emerald-700 hover:underline" data-testid="go-login">
+        <Link href="/login" className="font-semibold text-ink underline decoration-[#d4a24c] decoration-2 underline-offset-4" data-testid="go-login">
           Log in
         </Link>
       </p>

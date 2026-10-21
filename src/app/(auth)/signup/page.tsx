@@ -9,8 +9,8 @@ export default async function SignupPage() {
   if (await getOwner()) redirect("/dashboard");
   return (
     <>
-      <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900">Create your free account</h1>
-      <p className="mb-6 mt-1 text-sm text-slate-600">Publish an allergen-safe menu in minutes.</p>
+      <h1 className="font-serif text-4xl leading-tight text-ink">Create your free account</h1>
+      <p className="mb-6 mt-1 text-sm text-stone-600">Publish an allergen-safe menu in minutes.</p>
       <SignupForm />
     </>
   );

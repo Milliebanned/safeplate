@@ -12,7 +12,7 @@ export function LoginForm({ next, notice }: { next?: string; notice?: string }) 
   return (
     <form action={formAction} noValidate className="space-y-4" data-testid="login-form">
       {notice && !state.error && (
-        <p role="status" data-testid="login-notice" className="rounded-lg bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900">
+        <p role="status" data-testid="login-notice" className="rounded-full border border-[#d4a24c]/40 bg-[#d4a24c]/10 px-5 py-2.5 text-sm text-stone-800">
           {notice}
         </p>
       )}
@@ -48,9 +48,9 @@ export function LoginForm({ next, notice }: { next?: string; notice?: string }) 
       <button type="submit" className={`${primaryButton} w-full`} disabled={pending} data-testid="login-submit">
         {pending ? "Logging in…" : "Log in"}
       </button>
-      <p className="text-center text-sm text-slate-600">
+      <p className="text-center text-sm text-stone-600">
         New to SafePlate?{" "}
-        <Link href="/signup" className="font-semibold text-emerald-700 hover:underline" data-testid="go-signup">
+        <Link href="/signup" className="font-semibold text-ink underline decoration-[#d4a24c] decoration-2 underline-offset-4" data-testid="go-signup">
           Create a free account
         </Link>
       </p>
