@@ -1,8 +1,9 @@
 import "server-only";
 import { asc, eq, inArray } from "drizzle-orm";
 import { getDb } from "@/db";
-import { dishComponents, dishes, ingredients, recipeComponents, recipes, restaurants } from "@/db/schema";
+import { dishComponents, dishPhotos, dishes, ingredients, recipeComponents, recipes, restaurants } from "@/db/schema";
 import { type AllergenCode, type Component, createAllergenResolver, sortAllergens } from "./allergens";
+import { uploadedPhotoUrl } from "./photo";
 import { CATEGORIES } from "./sample-menu";
 
 export type IngredientView = { id: string; name: string; allergens: AllergenCode[]; usedIn: string[] };
@@ -21,6 +22,9 @@ export type DishView = {
   category: string;
   priceCents: number;
   published: boolean;
+  /** Uploaded photo first, then a bundled sample photo, else null. */
+  photoUrl: string | null;
+  hasUploadedPhoto: boolean;
   components: ComponentView[];
   allergens: AllergenCode[];
 };
@@ -38,14 +42,21 @@ export async function loadMenu(restaurantId: string): Promise<Menu> {
   ]);
   const recipeIds = recipeRows.map((r) => r.id);
   const dishIds = dishRows.map((d) => d.id);
-  const [recipeComponentRows, dishComponentRows] = await Promise.all([
+  const [recipeComponentRows, dishComponentRows, photoRows] = await Promise.all([
     recipeIds.length
       ? db.select().from(recipeComponents).where(inArray(recipeComponents.recipeId, recipeIds))
       : Promise.resolve([]),
     dishIds.length
       ? db.select().from(dishComponents).where(inArray(dishComponents.dishId, dishIds))
       : Promise.resolve([]),
+    dishIds.length
+      ? db
+          .select({ dishId: dishPhotos.dishId, updatedAt: dishPhotos.updatedAt })
+          .from(dishPhotos)
+          .where(inArray(dishPhotos.dishId, dishIds))
+      : Promise.resolve([]),
   ]);
+  const photoUpdated = new Map(photoRows.map((p) => [p.dishId, p.updatedAt]));
 
   const ingredientName = new Map(ingredientRows.map((i) => [i.id, i.name]));
   const recipeName = new Map(recipeRows.map((r) => [r.id, r.name]));
@@ -100,6 +111,8 @@ export async function loadMenu(restaurantId: string): Promise<Menu> {
         category: d.category,
         priceCents: d.priceCents,
         published: d.published,
+        photoUrl: photoUpdated.has(d.id) ? uploadedPhotoUrl(d.id, photoUpdated.get(d.id)!) : d.imageUrl,
+        hasUploadedPhoto: photoUpdated.has(d.id),
         components: dishGraph.get(d.id)!.map(named).sort(byName),
         allergens: resolver.componentsAllergens(dishGraph.get(d.id)!),
       }))
