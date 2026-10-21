@@ -69,7 +69,7 @@ export function DishManager({ dishes, options }: { dishes: DishView[]; options: 
 
   return (
     <div className="space-y-6">
-      <FlashMessage flash={flash} />
+      <FlashMessage flash={flash} floating />
 
       <form onSubmit={submit} noValidate className={`${cardClass} space-y-4`} data-testid="dish-form">
         <h2 className="font-serif text-2xl text-ink">{editing ? "Edit dish" : "Create dish"}</h2>

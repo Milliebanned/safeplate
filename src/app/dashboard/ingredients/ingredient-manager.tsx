@@ -56,7 +56,7 @@ export function IngredientManager({ ingredients }: { ingredients: IngredientView
 
   return (
     <div className="space-y-6">
-      <FlashMessage flash={flash} />
+      <FlashMessage flash={flash} floating />
 
       <form onSubmit={submit} noValidate className={`${cardClass} space-y-4`} data-testid="ingredient-form">
         <h2 className="font-serif text-2xl text-ink">{editing ? "Edit ingredient" : "Add ingredient"}</h2>
