@@ -62,3 +62,19 @@ body {
   background: linear-gradient(90deg, transparent, rgba(243, 237, 226, 0.22), transparent);
   height: 1px;
 }
+
+/* Printing from the dashboard prints only the table card. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #table-card,
+  #table-card * {
+    visibility: visible;
+  }
+  #table-card {
+    position: absolute;
+    inset: 2rem auto auto 50%;
+    transform: translateX(-50%);
+  }
+}
