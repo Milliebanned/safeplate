@@ -4,17 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/dashboard", label: "Overview", testId: "nav-overview" },
-  { href: "/dashboard/ingredients", label: "Ingredients", testId: "nav-ingredients" },
-  { href: "/dashboard/recipes", label: "Sub-recipes", testId: "nav-recipes" },
-  { href: "/dashboard/dishes", label: "Dishes", testId: "nav-dishes" },
-  { href: "/dashboard/settings", label: "Settings", testId: "nav-settings" },
+  { href: "/dashboard", label: "Overview", numeral: "I", testId: "nav-overview" },
+  { href: "/dashboard/ingredients", label: "Ingredients", numeral: "II", testId: "nav-ingredients" },
+  { href: "/dashboard/recipes", label: "Sub-recipes", numeral: "III", testId: "nav-recipes" },
+  { href: "/dashboard/dishes", label: "Dishes", numeral: "IV", testId: "nav-dishes" },
+  { href: "/dashboard/settings", label: "Settings", numeral: "V", testId: "nav-settings" },
 ] as const;
 
 export function DashboardNav() {
   const pathname = usePathname();
   return (
-    <ul className="flex gap-1 overflow-x-auto">
+    <ul className="flex gap-1 overflow-x-auto lg:flex-col lg:gap-0.5">
       {LINKS.map((link) => {
         const active = pathname === link.href;
         return (
@@ -23,10 +23,16 @@ export function DashboardNav() {
               href={link.href}
               data-testid={link.testId}
               aria-current={active ? "page" : undefined}
-              className={`block whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium ${
-                active ? "bg-emerald-50 text-emerald-800" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+              className={`group flex items-center gap-3 whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors lg:rounded-xl lg:py-2.5 ${
+                active ? "bg-ivory text-ink" : "text-ivory/65 hover:bg-ivory/5 hover:text-ivory"
               }`}
             >
+              <span
+                className={`hidden w-6 font-serif text-base italic lg:inline ${active ? "text-brass" : "text-ivory/35 group-hover:text-brass/80"}`}
+                aria-hidden
+              >
+                {link.numeral}
+              </span>
               {link.label}
             </Link>
           </li>

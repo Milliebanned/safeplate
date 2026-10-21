@@ -8,39 +8,40 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
   const owner = await requireOwner();
 
   return (
-    <div className="flex flex-1 flex-col">
-      <header className="border-b border-white/60 bg-white/50 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Logo href="/dashboard" />
-            <span className="hidden text-sm text-slate-500 sm:inline" data-testid="restaurant-name">
+    <div className="flex flex-1 flex-col bg-[#f4efe6] text-ink lg:flex-row">
+      <aside className="theme-ink flex flex-col gap-5 px-4 py-4 lg:sticky lg:top-0 lg:h-svh lg:w-72 lg:shrink-0 lg:gap-8 lg:px-5 lg:py-7">
+        <div className="flex items-center justify-between gap-3 lg:block">
+          <Logo href="/dashboard" tone="light" />
+          <div className="lg:mt-8">
+            <p className="hidden text-[10px] uppercase tracking-[0.35em] text-ivory/40 lg:block">Your restaurant</p>
+            <p className="max-w-[12rem] truncate font-serif text-lg text-ivory lg:mt-1 lg:max-w-none lg:text-2xl" data-testid="restaurant-name">
               {owner.restaurant.name}
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link
-              href={`/m/${owner.restaurant.slug}`}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
-              data-testid="nav-public-menu"
-            >
-              View public menu
-            </Link>
-            <form action={logout}>
-              <button
-                type="submit"
-                className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-                data-testid="logout"
-              >
-                Log out
-              </button>
-            </form>
+            </p>
           </div>
         </div>
-        <nav aria-label="Dashboard" className="mx-auto max-w-5xl px-4 pb-2">
+        <nav aria-label="Dashboard" className="lg:flex-1">
           <DashboardNav />
         </nav>
-      </header>
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</main>
+        <div className="flex items-center gap-2 lg:flex-col lg:items-stretch">
+          <Link
+            href={`/m/${owner.restaurant.slug}`}
+            className="flex-1 rounded-full border border-ivory/20 px-4 py-2 text-center text-sm text-ivory hover:border-ivory/50"
+            data-testid="nav-public-menu"
+          >
+            View public menu
+          </Link>
+          <form action={logout} className="lg:w-full">
+            <button
+              type="submit"
+              className="w-full rounded-full px-4 py-2 text-sm text-ivory/55 hover:text-ivory"
+              data-testid="logout"
+            >
+              Log out
+            </button>
+          </form>
+        </div>
+      </aside>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-10 lg:px-12 lg:py-14">{children}</main>
     </div>
   );
 }
